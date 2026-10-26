@@ -1,0 +1,51 @@
+[project]
+name = "app"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "asyncpg>=0.31.0",
+    "colorama>=0.4.6",
+    "fastapi[standard]>=0.141.1",
+    "pillow>=12.3.0",
+    "pwdlib[argon2]>=0.3.1",
+    "pydantic-settings>=2.15.0",
+    "pyjwt>=2.13.0",
+    "python-multipart>=0.0.32",
+    "sse-starlette>=3.4.11",
+]
+
+[project.scripts]
+app = "app:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.fastapi]
+entrypoint = "app.main:app"
+
+[dependency-groups]
+dev = ["poethepoet>=0.48.0", "pyright>=1.1.414", "ruff>=0.16.7"]
+
+
+[tool.poe.tasks.app]
+help = "Run the FastAPI application"
+cmd = "uv run --env-file ${env_file} fastapi ${mode}"
+args = [
+    { name = "mode", default = "dev", choices = [
+        "dev",
+        "run",
+    ], help = "Run mode: dev or production" },
+    { name = "env_file", default = ".env", help = "Env file to load (.env, .env.local, .env.production, etc)" },
+]
+
+[tool.poe.tasks.seed]
+help = "Seed the database"
+cmd = "uv run --env-file ${env_file} scripts/database/seed.py"
+args = [
+    { name = "env_file", default = ".env", help = "Env file to load (.env, .env.local, .env.production, etc)" },
+]
+
+[tool.poe.tasks.compile]
+cmd = "python -m compileall -q src"

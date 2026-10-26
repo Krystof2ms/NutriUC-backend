@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:18
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d web_saludable"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/postgresql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro,Z
+    env_file: .env.local
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env.local
+    volumes:
+      - ./backend:/app:Z
+
+volumes:
+  db_data:
+
+networks:
+  backend:

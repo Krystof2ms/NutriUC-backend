@@ -1,0 +1,1341 @@
+[
+  {
+    "name": "Patatas bravas fritas al aire",
+    "slug": "patatas-bravas-1",
+    "origin": "Español",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Remojar las patatas en agua con sal durante 30 minutos, luego escurrir y dejar secar al aire durante 5 minutos."
+      },
+      {
+        "step": 2,
+        "instruction": "Calentar la freidora de aire a 200°C."
+      },
+      {
+        "step": 3,
+        "instruction": "Colocar las patatas en un bol y rociar con 1 cucharada del aceite y añadir 1/2 cucharadita de sal y pimienta negra recién molida."
+      },
+      {
+        "step": 4,
+        "instruction": "Mezclar para cubrir las patatas por todas partes, luego colocar en la cesta de la freidora de aire y cocinar durante 20-30 minutos hasta que estén crujientes y doradas."
+      },
+      {
+        "step": 5,
+        "instruction": "Mientras tanto, calentar el aceite restante en una cacerola pequeña a fuego medio-bajo y freír la cebolla durante 8-10 minutos hasta que se ablande pero no se dore."
+      },
+      {
+        "step": 6,
+        "instruction": "Incorporar el ajo y cocinar durante un minuto antes de añadir el pimentón y cocinar durante 30 segundos más."
+      },
+      {
+        "step": 7,
+        "instruction": "Agregar el puré de tomate, cocinar durante 1 minuto, luego incorporar los tomates picados."
+      },
+      {
+        "step": 8,
+        "instruction": "Cocinar durante 5-10 minutos a fuego medio hasta que espese ligeramente."
+      },
+      {
+        "step": 9,
+        "instruction": "Una vez que se cocinen las patatas, colocar en una bandeja y verter la salsa de tomate por encima."
+      },
+      {
+        "step": 10,
+        "instruction": "Espolvorear con las hojas de albahaca y servir."
+      }
+    ],
+    "image_key": null,
+    "description": "Patatas",
+    "ingredients": [
+      {
+        "name": "Patatas",
+        "quantity": "900 g"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "3 cucharadas"
+      },
+      {
+        "name": "Cebolla",
+        "quantity": "1 picada"
+      },
+      {
+        "name": "Ajo",
+        "quantity": "1 diente pelado y triturado"
+      },
+      {
+        "name": "Pimentón",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Puré de tomate",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Tomates enlatados",
+        "quantity": "225 g"
+      },
+      {
+        "name": "Hojas de albahaca",
+        "quantity": "Al gusto para servir"
+      }
+    ],
+    "category_id": 1,
+    "user_id": 1
+  },
+  {
+    "name": "Felfel argelina (Ensalada de pimientos)",
+    "slug": "felfel-argelina-2",
+    "origin": "Argelina",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Precalentar el horno a 230°C."
+      },
+      {
+        "step": 2,
+        "instruction": "Colocar todos los pimientos envueltos en papel de aluminio."
+      },
+      {
+        "step": 3,
+        "instruction": "Hornear hasta que la piel se vea negra y los pimientos estén suaves, de 30 a 45 minutos, girando los pimientos una vez si es necesario."
+      },
+      {
+        "step": 4,
+        "instruction": "Retirar los pimientos del horno y dejar enfriar durante 10 minutos."
+      },
+      {
+        "step": 5,
+        "instruction": "Quitar la piel y retirar el tallo y las semillas."
+      },
+      {
+        "step": 6,
+        "instruction": "Cortar los pimientos asados en trozos de aproximadamente 1,5 cm."
+      },
+      {
+        "step": 7,
+        "instruction": "Calentar el aceite de oliva en una sartén a fuego medio."
+      },
+      {
+        "step": 8,
+        "instruction": "Agregar la cebolla y cocinar, revolviendo con frecuencia, hasta que la cebolla se ablande y se vuelva translúcida, unos 5 minutos."
+      },
+      {
+        "step": 9,
+        "instruction": "Añadir el ajo, la sal y la pimienta; incorporar los pimientos picados y el tomate."
+      },
+      {
+        "step": 10,
+        "instruction": "Cocinar a fuego medio, revolviendo ocasionalmente, hasta que el tomate esté suave y la mezcla esté bien incorporada, unos 5 minutos."
+      }
+    ],
+    "image_key": null,
+    "description": "Precalentar el horno a 230°C. Colocar todos los pimientos envueltos en papel de aluminio. Hornear hasta que la piel se vea negra y los pimientos estén suaves, d...",
+    "ingredients": [
+      {
+        "name": "Pimientos verdes",
+        "quantity": "3"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Cebollas rojas",
+        "quantity": "1 picada"
+      },
+      {
+        "name": "Ajo",
+        "quantity": "1 diente pelado y triturado"
+      },
+      {
+        "name": "Sal",
+        "quantity": "Al gusto"
+      },
+      {
+        "name": "Pimienta",
+        "quantity": "Al gusto"
+      },
+      {
+        "name": "Tomates",
+        "quantity": "1 cortado en cubos"
+      }
+    ],
+    "category_id": 1,
+    "user_id": 2
+  },
+  {
+    "name": "Berenjenas a la parrilla con hummus",
+    "slug": "berenjenas-parrilla-3",
+    "origin": "Turco",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Colocar la berenjena en una capa sobre una bandeja grande para hornear."
+      },
+      {
+        "step": 2,
+        "instruction": "Pincelar generosamente con aceite vegetal, luego sazonar generosamente."
+      },
+      {
+        "step": 3,
+        "instruction": "Asar durante 15 minutos, dando vuelta dos veces y pincelando con aceite hasta que las rodajas se ablanden y estén cocidas."
+      },
+      {
+        "step": 4,
+        "instruction": "Mientras tanto, procesar el pan hasta obtener migas."
+      },
+      {
+        "step": 5,
+        "instruction": "Añadir 2 cucharadas de aceite y procesar brevemente de nuevo para cubrir."
+      },
+      {
+        "step": 6,
+        "instruction": "Untar un par de cucharaditas de hummus encima de cada rebanada de berenjena."
+      },
+      {
+        "step": 7,
+        "instruction": "Colocar las migas de pan sobre un plato grande, luego presionar el lado húmedo de las berenjenas en las migas para cubrir."
+      },
+      {
+        "step": 8,
+        "instruction": "Asar de nuevo, con la cara de migas hacia arriba, durante unos 3 minutos hasta que estén doradas."
+      },
+      {
+        "step": 9,
+        "instruction": "Mezclar las nueces, perejil y tomates cherry en un bol y sazonar."
+      },
+      {
+        "step": 10,
+        "instruction": "Añadir el jugo de limón y aceite de oliva y mezclar de nuevo."
+      },
+      {
+        "step": 11,
+        "instruction": "Servir las berenjenas a la parrilla con la ensalada, un poco más de hummus y pan de pita."
+      }
+    ],
+    "image_key": null,
+    "description": "Paso 1 Colocar la berenjena en una capa sobre una bandeja grande para hornear. Pincelar generosamente con aceite vegetal, luego sazonar generosamente. Asar dura...",
+    "ingredients": [
+      {
+        "name": "Berenjenas",
+        "quantity": "2"
+      },
+      {
+        "name": "Aceite vegetal",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Pan",
+        "quantity": "3 rebanadas finas"
+      },
+      {
+        "name": "Hummus",
+        "quantity": "300 g"
+      },
+      {
+        "name": "Nueces",
+        "quantity": "100 g"
+      },
+      {
+        "name": "Perejil",
+        "quantity": "40 g"
+      },
+      {
+        "name": "Tomates cherry",
+        "quantity": "200 g"
+      },
+      {
+        "name": "Limón",
+        "quantity": "Jugo de 1/2"
+      },
+      {
+        "name": "Aceite de oliva virgen extra",
+        "quantity": "Un chorrito"
+      }
+    ],
+    "category_id": 1,
+    "user_id": 1
+  },
+  {
+    "name": "Ensalada de cuscús con berenjena",
+    "slug": "ensalada-cuscus-4",
+    "origin": "Turco",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Calentar la parrilla."
+      },
+      {
+        "step": 2,
+        "instruction": "Colocar la berenjena en una bandeja para hornear, pincelar con aceite y sazonar."
+      },
+      {
+        "step": 3,
+        "instruction": "Asar durante unos 15 minutos, dando vuelta y pincelando con más aceite a mitad de cocción, hasta que esté dorada y suave."
+      },
+      {
+        "step": 4,
+        "instruction": "Mientras tanto, colocar el cuscús en un bol grande, verter el caldo, luego cubrir y dejar reposar durante 10 minutos."
+      },
+      {
+        "step": 5,
+        "instruction": "Mezclar los tomates, la menta, el queso de cabra y el aceite restante."
+      },
+      {
+        "step": 6,
+        "instruction": "Separar el cuscús con un tenedor."
+      },
+      {
+        "step": 7,
+        "instruction": "Incorporar las berenjenas, la mezcla de tomate y el jugo de limón."
+      }
+    ],
+    "image_key": null,
+    "description": "Paso 1 Calentar la parrilla. Colocar la berenjena en una bandeja para hornear, pincelar con aceite y sazonar. Asar durante unos 15 minutos, dando vuelta y pince...",
+    "ingredients": [
+      {
+        "name": "Berenjena",
+        "quantity": "1 en rodajas"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "3 cucharadas"
+      },
+      {
+        "name": "Cuscús",
+        "quantity": "140 g"
+      },
+      {
+        "name": "Caldo de verduras",
+        "quantity": "225 ml"
+      },
+      {
+        "name": "Tomates cherry",
+        "quantity": "200 g"
+      },
+      {
+        "name": "Menta",
+        "quantity": "Un puñado"
+      },
+      {
+        "name": "Queso de cabra",
+        "quantity": "100 g"
+      },
+      {
+        "name": "Limón",
+        "quantity": "Jugo de 1/2"
+      }
+    ],
+    "category_id": 1,
+    "user_id": 2
+  },
+  {
+    "name": "Dip de aguacate con patatas nuevas",
+    "slug": "dip-aguacate-5",
+    "origin": "Australiano",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Triturar la mitad de la carne de aguacate con el yogur, el jugo de lima y limón, y sazonar."
+      },
+      {
+        "step": 2,
+        "instruction": "Cortar en cubos el aguacate restante, luego incorporar suavemente a la mezcla batida con la mayor parte de la ralladura de lima."
+      },
+      {
+        "step": 3,
+        "instruction": "Cubrir y refrigerar hasta que esté listo para servir."
+      },
+      {
+        "step": 4,
+        "instruction": "Hervir las patatas durante 6 minutos, luego escurrir bien y mezclar con aceite de oliva, chile en polvo y semillas de comino."
+      },
+      {
+        "step": 5,
+        "instruction": "Reservar hasta media hora antes de que lleguen los invitados."
+      },
+      {
+        "step": 6,
+        "instruction": "Calentar el horno a 200°C con ventilador a 180°C."
+      },
+      {
+        "step": 7,
+        "instruction": "Asar las patatas durante unos 30 minutos, sacudiendo la bandeja a mitad de cocción, hasta que estén doradas y tiernas."
+      },
+      {
+        "step": 8,
+        "instruction": "Transferir el dip a uno o dos boles, esparcir con la ralladura de lima restante y servir con las patatas calientes y chips de tortilla para mojar."
+      }
+    ],
+    "image_key": null,
+    "description": "Paso 1 Triturar la mitad de la carne de aguacate con el yogur, jugo de lima y limón y sazonar. Cortar en cubos el aguacate restante, luego incorporar suavemente...",
+    "ingredients": [
+      {
+        "name": "Aguacate",
+        "quantity": "3 grandes"
+      },
+      {
+        "name": "Yogur natural",
+        "quantity": "200 g"
+      },
+      {
+        "name": "Lima",
+        "quantity": "Ralladura y jugo de 1"
+      },
+      {
+        "name": "Limón",
+        "quantity": "Jugo de 1/2"
+      },
+      {
+        "name": "Patatas nuevas",
+        "quantity": "1,25 kg"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Chile en polvo picante",
+        "quantity": "1 cucharadita"
+      },
+      {
+        "name": "Semillas de comino",
+        "quantity": "1 cucharadita"
+      },
+      {
+        "name": "Tortillas chips",
+        "quantity": "200 g"
+      }
+    ],
+    "category_id": 1,
+    "user_id": 3
+  },
+  {
+    "name": "Arroz con gambas y calamares",
+    "slug":"arroz-gambas-6",
+    "origin": "Español",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Pelar y desvenar la mayoría de las gambas, manteniendo algunas enteras para decoración, si lo desea."
+      },
+      {
+        "step": 2,
+        "instruction": "Calentar el aceite de oliva en una sartén grande o paellera poco profunda a fuego medio-bajo y freír la cebolla durante 5 minutos hasta que se ablande."
+      },
+      {
+        "step": 3,
+        "instruction": "Añadir la hoja de laurel, el azafrán, el arroz y el puré de tomate, y cocinar durante 1-2 minutos más, revolviendo."
+      },
+      {
+        "step": 4,
+        "instruction": "Verter el vino y dejar que burbujee durante 1-2 minutos."
+      },
+      {
+        "step": 5,
+        "instruction": "Verter el caldo de marisco y 150 ml de agua."
+      },
+      {
+        "step": 6,
+        "instruction": "Cocinar durante 5 minutos, luego añadir los calamares, sazonar bien y revolver para combinar."
+      },
+      {
+        "step": 7,
+        "instruction": "Llevar a ebullición, luego cubrir y reducir el calor a fuego lento."
+      },
+      {
+        "step": 8,
+        "instruction": "Cocinar durante 12 minutos más, añadiendo un poco más de agua si la mezcla comienza a verse seca."
+      },
+      {
+        "step": 9,
+        "instruction": "Destapar la sartén y revolver incorporando las gambas peladas."
+      },
+      {
+        "step": 10,
+        "instruction": "Colocar las gambas enteras encima de la mezcla de arroz."
+      },
+      {
+        "step": 11,
+        "instruction": "Cubrir de nuevo y cocer a fuego lento durante otros 5-6 minutos hasta que las gambas estén rosadas y cocidas."
+      },
+      {
+        "step": 12,
+        "instruction": "Dejar reposar un par de minutos antes de servir desde la sartén."
+      }
+    ],
+    "image_key": null,
+    "description": "Paso 1 Pelar y desvenar la mayoría de las gambas (un pescadero debería poder hacer esto por usted), manteniendo algunas enteras para decoración, si lo desea. Ca...",
+    "ingredients": [
+      {
+        "name": "Gambas grandes crudas",
+        "quantity": "24"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Cebolla",
+        "quantity": "1 pequeña"
+      },
+      {
+        "name": "Hoja de laurel",
+        "quantity": "1"
+      },
+      {
+        "name": "Azafrán",
+        "quantity": "1 pizca"
+      },
+      {
+        "name": "Arroz para paella",
+        "quantity": "450 g"
+      },
+      {
+        "name": "Puré de tomate",
+        "quantity": "2 cucharaditas"
+      },
+      {
+        "name": "Vino blanco",
+        "quantity": "200 ml"
+      },
+      {
+        "name": "Caldo de marisco",
+        "quantity": "650 ml"
+      },
+      {
+        "name": "Calamares",
+        "quantity": "300 g limpios y en rodajas"
+      }
+    ],
+    "category_id": 2,
+    "user_id": 3
+  },
+  {
+    "name": "Salmón horneado con hinojo y tomates",
+    "slug": "salmon-horneado-7",
+    "origin": "Británica",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Calentar el horno a 180°C con ventilador a 160°C."
+      },
+      {
+        "step": 2,
+        "instruction": "Recortar las hojas del hinojo y reservar."
+      },
+      {
+        "step": 3,
+        "instruction": "Cortar los bulbos de hinojo por la mitad, luego cortar cada mitad en 3 gajos."
+      },
+      {
+        "step": 4,
+        "instruction": "Cocinar el hinojo en agua salada hirviendo durante 10 minutos, luego escurrir bien."
+      },
+      {
+        "step": 5,
+        "instruction": "Picar las hojas de hinojo finamente, luego mezclar con el perejil y la ralladura de limón."
+      },
+      {
+        "step": 6,
+        "instruction": "Extender el hinojo escurrido sobre una fuente para horno poco profunda, luego añadir los tomates."
+      },
+      {
+        "step": 7,
+        "instruction": "Rociar con aceite de oliva y hornear durante 10 minutos."
+      },
+      {
+        "step": 8,
+        "instruction": "Colocar el salmón entre las verduras, rociar con jugo de limón y hornear durante 15 minutos más hasta que el pescado esté cocido."
+      },
+      {
+        "step": 9,
+        "instruction": "Esparcir el perejil por encima y servir."
+      }
+    ],
+    "image_key": null,
+    "description": "Calentar el horno a 180°C con ventilador a 160°C. Recortar las hojas del hinojo y reservar. Cortar los bulbos de hinojo por la mitad, luego cortar cada mitad en...",
+    "ingredients": [
+      {
+        "name": "Hinojo",
+        "quantity": "2 medianos"
+      },
+      {
+        "name": "Perejil",
+        "quantity": "2 cucharadas picado"
+      },
+      {
+        "name": "Limón",
+        "quantity": "Jugo de 1"
+      },
+      {
+        "name": "Tomates cherry",
+        "quantity": "175 g"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Salmón",
+        "quantity": "350 g"
+      },
+      {
+        "name": "Aceitunas negras",
+        "quantity": "Para servir"
+      }
+    ],
+    "category_id": 2,
+    "user_id": 3
+  },
+  {
+    "name": "Ensalada de fideos con gambas",
+    "slug":"ensalada-fideos-8",
+    "origin": "Vietnamita",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Cocinar los fideos siguiendo las instrucciones del paquete, luego enjuagar bajo agua fría y escurrir completamente."
+      },
+      {
+        "step": 2,
+        "instruction": "En una cacerola pequeña, derretir la mantequilla de cacahuete, la leche de coco, la salsa de chile dulce y la mitad de las cebolletas."
+      },
+      {
+        "step": 3,
+        "instruction": "Añadir 1-2 cucharadas de agua para aflojar la mezcla hasta obtener una consistencia fluida."
+      },
+      {
+        "step": 4,
+        "instruction": "Mezclar los fideos, el pepino y los brotes de soja en una fuente para servir."
+      },
+      {
+        "step": 5,
+        "instruction": "Cubrir con las gambas, rociar la salsa de cacahuete por encima y esparcir las cebolletas restantes."
+      }
+    ],
+    "image_key": null,
+    "description": "Paso 1 Colocar la berenjena en una capa sobre una bandeja grande para hornear. Pincelar generosamente con aceite vegetal, luego sazonar generosamente. Asar dura...",
+    "ingredients": [
+      {
+        "name": "Fideos de arroz",
+        "quantity": "140 g"
+      },
+      {
+        "name": "Mantequilla de cacahuete",
+        "quantity": "3 cucharadas"
+      },
+      {
+        "name": "Leche de coco",
+        "quantity": "4 cucharadas"
+      },
+      {
+        "name": "Salsa de chile dulce",
+        "quantity": "3 cucharadas"
+      },
+      {
+        "name": "Cebolletas",
+        "quantity": "3 en rodajas finas"
+      },
+      {
+        "name": "Pepino",
+        "quantity": "1 en rodajas"
+      },
+      {
+        "name": "Brotes de soja",
+        "quantity": "300 g"
+      },
+      {
+        "name": "Gambas",
+        "quantity": "200 g"
+      }
+    ],
+    "category_id": 2,
+    "user_id": 2
+  },
+  {
+    "name": "Barramundi con especias marroquíes",
+    "slug":"barramundi-especias-9",
+    "origin": "Australiana",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Colocar todos los ingredientes del aliño en un procesador de alimentos con una pizca de sal y procesar hasta obtener un aliño."
+      },
+      {
+        "step": 2,
+        "instruction": "Hacer tres cortes a cada lado del pescado, cubrir con la mitad del aliño y reservar para marinar durante unos 30 minutos."
+      },
+      {
+        "step": 3,
+        "instruction": "Calentar el horno a 220°C con ventilador a 200°C."
+      },
+      {
+        "step": 4,
+        "instruction": "Colocar el pescado en una bandeja de horno y cocinar durante 20 minutos hasta que la carne esté firme y los ojos se hayan vuelto blancos."
+      },
+      {
+        "step": 5,
+        "instruction": "Servir el pescado con el resto del aliño y cuscús o arroz al vapor."
+      }
+    ],
+    "image_key": null,
+    "description": "Paso 1 Colocar todos los ingredientes del aliño en un procesador de alimentos con una pizca de sal y procesar hasta obtener un aliño. Hacer tres cortes a cada l...",
+    "ingredients": [
+      {
+        "name": "Barramundi",
+        "quantity": "2 de 400 g cada uno"
+      },
+      {
+        "name": "Comino molido",
+        "quantity": "1/2 cucharadita"
+      },
+      {
+        "name": "Cilantro",
+        "quantity": "1 manojo"
+      },
+      {
+        "name": "Pimentón",
+        "quantity": "1 pizca"
+      },
+      {
+        "name": "Chile en polvo",
+        "quantity": "1 pizca"
+      },
+      {
+        "name": "Dientes de ajo",
+        "quantity": "2"
+      },
+      {
+        "name": "Limón",
+        "quantity": "Jugo de 1"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "5 cucharadas"
+      }
+    ],
+    "category_id": 2,
+    "user_id": 1
+  },
+  {
+    "name": "Tacos de pescado cajún picantes",
+    "slug": "tacos-pescado-10",
+    "origin": "Mexicana",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "En un plato grande, mezclar la especia cajún y la pimienta de cayena con un poco de sal y pimienta, y usar la mezcla para cubrir el pescado por todas partes."
+      },
+      {
+        "step": 2,
+        "instruction": "Calentar un poco de aceite en una sartén, añadir el pescado y cocinar a fuego medio hasta que esté dorado."
+      },
+      {
+        "step": 3,
+        "instruction": "Reducir el calor y continuar friendo hasta que el pescado esté cocido completamente, unos 10 minutos. Cocinar en lotes si no hay suficiente espacio en la sartén."
+      },
+      {
+        "step": 4,
+        "instruction": "Mientras tanto, preparar el aliño combinando todos los ingredientes con un poco de sal y pimienta."
+      },
+      {
+        "step": 5,
+        "instruction": "Calentar las tortillas en el microondas durante 5-10 segundos."
+      },
+      {
+        "step": 6,
+        "instruction": "Rellenar las tortillas con el aguacate, la lechuga y la cebolleta."
+      },
+      {
+        "step": 7,
+        "instruction": "Añadir una cucharada de salsa, cubrir con grandes trozos de pescado y rociar con el aliño por encima."
+      }
+    ],
+    "image_key": null,
+    "description": "Cocinar el pescado con una mezcla de especias cajún y pimienta de cayena lo hace súper suculento y sabroso. Cubrir con un aliño y servir en una tortilla para un...",
+    "ingredients": [
+      {
+        "name": "Especias cajún",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Pimienta de cayena",
+        "quantity": "1 cucharadita"
+      },
+      {
+        "name": "Pescado blanco",
+        "quantity": "4 filetes"
+      },
+      {
+        "name": "Aceite vegetal",
+        "quantity": "1 cucharadita"
+      },
+      {
+        "name": "Tortillas de harina",
+        "quantity": "8"
+      },
+      {
+        "name": "Aguacate",
+        "quantity": "1 en rodajas"
+      },
+      {
+        "name": "Lechuga tipo gema",
+        "quantity": "2 ralladas"
+      },
+      {
+        "name": "Cebolletas",
+        "quantity": "4 ralladas"
+      },
+      {
+        "name": "Salsa",
+        "quantity": "300 ml"
+      },
+      {
+        "name": "Crema agria",
+        "quantity": "1 recipiente"
+      },
+      {
+        "name": "Limón",
+        "quantity": "1"
+      },
+      {
+        "name": "Ajo",
+        "quantity": "1 diente picado finamente"
+      }
+    ],
+    "category_id": 2,
+    "user_id": 2
+  },
+  {
+    "name": "Pollo Buffalo",
+    "slug": "pollo-buffalo-11",
+    "origin": "Americano",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Marinar el pollo en una mezcla de jugo de limón, sal, pimienta y aceite durante al menos 2 horas."
+      },
+      {
+        "step": 2,
+        "instruction": "Cocinar el pollo a la parrilla o en una sartén hasta que esté bien dorado y cocido por completo."
+      },
+      {
+        "step": 3,
+        "instruction": "Mezclar la salsa picante con mantequilla derretida y cubrir el pollo con esta mezcla."
+      },
+      {
+        "step": 4,
+        "instruction": "Preparar el coleslaw mezclando el repollo rallado con mayonesa y crema agria."
+      },
+      {
+        "step": 5,
+        "instruction": "Servir el pollo en panecillos con lechuga, queso, pimientos rojos y el coleslaw."
+      }
+    ],
+    "image_key": null,
+    "description": "Pollo Buffalo es un plato tradicional de la cocina americana que consiste en pollo marinado en una mezcla de jugo de limón, sal, pimienta y aceite, cocido a la parrilla o en una sartén hasta que esté bien dorado y cubierto con una salsa picante y mantequilla derretida. Se sirve comúnmente con coleslaw, lechuga, queso y pimientos rojos.",
+    "ingredients": [
+      {
+        "name": "Pechugas de pollo",
+        "quantity": "2"
+      },
+      {
+        "name": "Aceite",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Salsa picante",
+        "quantity": "4 cucharadas"
+      },
+      {
+        "name": "Jugo de limón",
+        "quantity": "1/2 limón"
+      },
+      {
+        "name": "Panecillos",
+        "quantity": "2"
+      },
+      {
+        "name": "Queso",
+        "quantity": "250 g"
+      },
+      {
+        "name": "Repollo",
+        "quantity": "1/4"
+      },
+      {
+        "name": "Mayonesa",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Crema agria",
+        "quantity": "4 cucharadas"
+      },
+      {
+        "name": "Lechuga",
+        "quantity": "4 hojas"
+      },
+      {
+        "name": "Pimientos rojos",
+        "quantity": "2"
+      }
+    ],
+    "category_id": 3,
+    "user_id": 2
+  },
+  {
+    "name": "Ayam Percik",
+    "slug": "ayam-percik-12",
+    "origin": "Malasio",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "En una licuadora, añadir los ingredientes para la pasta de especias y mezclar hasta que esté suave."
+      },
+      {
+        "step": 2,
+        "instruction": "A fuego medio, verter la pasta de especias en una sartén y freír durante 10 minutos hasta que esté fragante. Añadir agua o aceite 1 cucharada a la vez si la pasta se vuelve demasiado seca. No quemar la pasta. Bajar el fuego ligeramente si es necesario."
+      },
+      {
+        "step": 3,
+        "instruction": "Añadir los clavos, el cardamomo, la pulpa de tamarindo, la leche de coco, el agua, el azúcar y la sal."
+      },
+      {
+        "step": 4,
+        "instruction": "Subir el calor y llevar la mezcla a ebullición."
+      },
+      {
+        "step": 5,
+        "instruction": "Bajar el calor a medio-bajo y cocinar a fuego lento durante 10 minutos, revolviendo ocasionalmente. Se reducirá ligeramente."
+      },
+      {
+        "step": 6,
+        "instruction": "Probar la marinada y ajustar el sazón si es necesario. No preocuparse si está un poco amarga, ya que el amargor disminuirá al asarla."
+      },
+      {
+        "step": 7,
+        "instruction": "Cuando la marinada se haya enfriado, verterla sobre el pollo y marinar durante la noche o hasta dos días."
+      },
+      {
+        "step": 8,
+        "instruction": "Precalentar el horno a 220°C."
+      },
+      {
+        "step": 9,
+        "instruction": "Retirar el pollo de la marinada."
+      },
+      {
+        "step": 10,
+        "instruction": "Verter la marinada sobre una bandeja para hornear engrasada o forrada con papel de aluminio."
+      },
+      {
+        "step": 11,
+        "instruction": "Colocar el pollo encima de la salsa, asegurándose de que cubra la mayor parte de la salsa para evitar que se queme, y untar la marinada restante sobre el pollo."
+      },
+      {
+        "step": 12,
+        "instruction": "Asar durante 35-45 minutos o hasta que la temperatura interna de la parte más gruesa del pollo sea de al menos 75°C."
+      },
+      {
+        "step": 13,
+        "instruction": "Dejar reposar el pollo durante 5 minutos."
+      },
+      {
+        "step": 14,
+        "instruction": "Pincelar el pollo con un poco de aceite."
+      },
+      {
+        "step": 15,
+        "instruction": "Servir el pollo con la salsa sobre arroz al vapor o arroz de coco."
+      }
+    ],
+    "image_key": null,
+    "description": "En una licuadora, añadir los ingredientes para la pasta de especias y mezclar hasta que esté suave.  A fuego medio, verter la pasta de especias en una sartén y ...",
+    "ingredients": [
+      {
+        "name": "Muslos de pollo",
+        "quantity": "6"
+      },
+      {
+        "name": "Chalotas",
+        "quantity": "16"
+      },
+      {
+        "name": "Jengibre",
+        "quantity": "3 cm"
+      },
+      {
+        "name": "Dientes de ajo",
+        "quantity": "6"
+      },
+      {
+        "name": "Pimienta de cayena",
+        "quantity": "8"
+      },
+      {
+        "name": "Cúrcuma",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Comino",
+        "quantity": "1 cucharada y media"
+      },
+      {
+        "name": "Cilantro",
+        "quantity": "1 cucharada y media"
+      },
+      {
+        "name": "Hinojo",
+        "quantity": "1 cucharada y media"
+      },
+      {
+        "name": "Pulpa de tamarindo",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Leche de coco",
+        "quantity": "1 lata (400 ml)"
+      },
+      {
+        "name": "Azúcar",
+        "quantity": "1 cucharadita"
+      },
+      {
+        "name": "Agua",
+        "quantity": "240 ml"
+      }
+    ],
+    "category_id": 3,
+    "user_id": 1
+  },
+  {
+    "name": "Pollo estofado jamaiquino",
+    "slug": "pollo-estofado-13",
+    "origin": "Jamaiquino",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Exprimir el jugo de lima sobre el pollo y frotar bien. Retirar el exceso de jugo de lima."
+      },
+      {
+        "step": 2,
+        "instruction": "Combinar el tomate, la cebolleta, la cebolla, el ajo, el pimiento, el tomillo, la pimienta de Jamaica y la salsa de soja en un bol grande con las piezas de pollo."
+      },
+      {
+        "step": 3,
+        "instruction": "Cubrir y marinar durante al menos una hora."
+      },
+      {
+        "step": 4,
+        "instruction": "Calentar aceite en una olla o cacerola grande. Sacudir los condimentos al retirar cada pieza de pollo de la marinada y reservar la marinada para la salsa."
+      },
+      {
+        "step": 5,
+        "instruction": "Dorar ligeramente el pollo unas pocas piezas a la vez en aceite muy caliente."
+      },
+      {
+        "step": 6,
+        "instruction": "Colocar las piezas de pollo doradas en un plato para reposar mientras se doran las piezas restantes."
+      },
+      {
+        "step": 7,
+        "instruction": "Retirar el exceso de aceite y devolver el pollo a la sartén."
+      },
+      {
+        "step": 8,
+        "instruction": "Verter la marinada sobre el pollo y añadir las zanahorias."
+      },
+      {
+        "step": 9,
+        "instruction": "Tapar y cocinar a fuego medio durante 10 minutos."
+      },
+      {
+        "step": 10,
+        "instruction": "Mezclar la maicena y la leche de coco y añadir al estofado, revolviendo constantemente."
+      },
+      {
+        "step": 11,
+        "instruction": "Bajar el fuego al mínimo y cocinar durante otros 20 minutos o hasta que el pollo esté tierno."
+      }
+    ],
+    "image_key": null,
+    "description": "El Arroz con Pollo y Chorizo es una receta tradicional española que combina arroz, pollo, chorizo y tomate en una salsa cremosa y sabrosa.",
+    "ingredients": [
+      {
+        "name": "Pollo",
+        "quantity": "1 entero"
+      },
+      {
+        "name": "Tomate",
+        "quantity": "1 picado"
+      },
+      {
+        "name": "Cebollas",
+        "quantity": "2 picadas"
+      },
+      {
+        "name": "Dientes de ajo",
+        "quantity": "2 picados"
+      },
+      {
+        "name": "Pimiento rojo",
+        "quantity": "1 picado"
+      },
+      {
+        "name": "Zanahorias",
+        "quantity": "1 picada"
+      },
+      {
+        "name": "Lima",
+        "quantity": "1"
+      },
+      {
+        "name": "Tomillo",
+        "quantity": "2 cucharaditas"
+      },
+      {
+        "name": "Pimienta de Jamaica",
+        "quantity": "1 cucharadita"
+      },
+      {
+        "name": "Salsa de soja",
+        "quantity": "2 cucharadas"
+      },
+      {
+        "name": "Maicena",
+        "quantity": "2 cucharaditas"
+      },
+      {
+        "name": "Leche de coco",
+        "quantity": "480 ml"
+      },
+      {
+        "name": "Aceite vegetal",
+        "quantity": "1 cucharada"
+      }
+    ],
+    "category_id": 3,
+    "user_id": 2
+  },
+  {
+    "name": "Sándwich estilo Chick-Fil-A",
+    "slug": "sandwich-estilo-14",
+    "origin": "Americano",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Envolver el pollo sin apretar entre papel film y golpear suavemente con el lado plano de un mazo de carne hasta aproximadamente 1,5 cm de espesor."
+      },
+      {
+        "step": 2,
+        "instruction": "Cortar el pollo en dos piezas, lo más iguales posible."
+      },
+      {
+        "step": 3,
+        "instruction": "Marinar el pollo en el jugo de pepinillos durante 30 minutos a una hora. Añadir una cucharadita de salsa Tabasco para un sándwich picante, si se desea."
+      },
+      {
+        "step": 4,
+        "instruction": "Batir el huevo con la leche en un bol."
+      },
+      {
+        "step": 5,
+        "instruction": "Combinar la harina, el azúcar glas y las especias en otro bol."
+      },
+      {
+        "step": 6,
+        "instruction": "Sumergir cada pieza de pollo en el huevo por ambos lados, luego rebozar con la mezcla de harina por ambos lados."
+      },
+      {
+        "step": 7,
+        "instruction": "Calentar el aceite en una sartén, aproximadamente 1,5 cm de profundidad, a unos 175-180°C."
+      },
+      {
+        "step": 8,
+        "instruction": "Freír cada pieza durante 2 minutos por cada lado, o hasta que estén doradas y cocidas."
+      },
+      {
+        "step": 9,
+        "instruction": "Escurrir sobre papel absorbente."
+      },
+      {
+        "step": 10,
+        "instruction": "Servir en panecillos tostados con rodajas de pepinillo."
+      }
+    ],
+    "image_key": null,
+    "description": "El Arroz con Pollo y Chorizo es una receta tradicional española que combina arroz, pollo, chorizo y tomate en una salsa cremosa y sabrosa.",
+    "ingredients": [
+      {
+        "name": "Pechuga de pollo",
+        "quantity": "1"
+      },
+      {
+        "name": "Jugo de pepinillos",
+        "quantity": "60 ml"
+      },
+      {
+        "name": "Huevo",
+        "quantity": "1"
+      },
+      {
+        "name": "Leche",
+        "quantity": "60 ml"
+      },
+      {
+        "name": "Harina",
+        "quantity": "65 g"
+      },
+      {
+        "name": "Azúcar glas",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Pimentón",
+        "quantity": "1/2 cucharadita"
+      },
+      {
+        "name": "Sal",
+        "quantity": "1/2 cucharadita"
+      },
+      {
+        "name": "Pimienta negra",
+        "quantity": "1/4 cucharadita"
+      },
+      {
+        "name": "Ajo en polvo",
+        "quantity": "1/4 cucharadita"
+      },
+      {
+        "name": "Sal de apio",
+        "quantity": "1/4 cucharadita"
+      },
+      {
+        "name": "Pimienta de cayena",
+        "quantity": "1/2 cucharadita"
+      },
+      {
+        "name": "Aceite de oliva",
+        "quantity": "240 ml para freír"
+      },
+      {
+        "name": "Panecillos con semillas de sésamo",
+        "quantity": "1"
+      }
+    ],
+    "category_id": 3,
+    "user_id": 2
+  },
+  {
+    "name": "Arroz con pollo y chorizo",
+    "slug": "arrorz-pollo-15",
+    "origin": "Español",
+    "instructions": [
+      {
+        "step": 1,
+        "instruction": "Calentar el aceite en una cazuela grande apta para fuego y dorar las piezas de pollo por todos los lados, haciéndolo en lotes si es necesario."
+      },
+      {
+        "step": 2,
+        "instruction": "Retirar el pollo de la cazuela y reservar."
+      },
+      {
+        "step": 3,
+        "instruction": "Bajar el fuego, añadir la cebolla y el pimiento, y cocinar suavemente durante 10 minutos hasta que se ablanden."
+      },
+      {
+        "step": 4,
+        "instruction": "Añadir el ajo y el chorizo, y cocinar durante otros 2 minutos hasta que el chorizo haya liberado parte de sus aceites."
+      },
+      {
+        "step": 5,
+        "instruction": "Incorporar el puré de tomate y cocinar durante 1 minuto más."
+      },
+      {
+        "step": 6,
+        "instruction": "Devolver las piezas de pollo a la cazuela junto con el tomillo, el vino blanco y el caldo."
+      },
+      {
+        "step": 7,
+        "instruction": "Llevar el líquido a ebullición, cubrir la cazuela con una tapa ajustada y bajar el fuego."
+      },
+      {
+        "step": 8,
+        "instruction": "Cocinar durante 30 minutos."
+      },
+      {
+        "step": 9,
+        "instruction": "Agregar el arroz y mezclar todo."
+      },
+      {
+        "step": 10,
+        "instruction": "Cubrir, mantener a fuego bajo y cocinar durante otros 15 minutos, o hasta que el arroz esté cocido y haya absorbido la mayor parte del líquido de cocción."
+      },
+      {
+        "step": 11,
+        "instruction": "Retirar del fuego y dejar reposar durante 10 minutos para que absorba cualquier líquido restante."
+      },
+      {
+        "step": 12,
+        "instruction": "Sazonar al gusto y espolvorear con perejil para servir."
+      }
+    ],
+    "image_key": null,
+    "description": "El Arroz con Pollo y Chorizo es una receta tradicional española que combina arroz, pollo, chorizo y tomate en una salsa cremosa y sabrosa.",
+    "ingredients": [
+      {
+        "name": "Aceite",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Pollo",
+        "quantity": "1 entero"
+      },
+      {
+        "name": "Cebolla",
+        "quantity": "1 grande picada"
+      },
+      {
+        "name": "Pimiento rojo",
+        "quantity": "1 picado"
+      },
+      {
+        "name": "Ajo",
+        "quantity": "3 dientes triturados"
+      },
+      {
+        "name": "Chorizo",
+        "quantity": "225 g"
+      },
+      {
+        "name": "Puré de tomate",
+        "quantity": "1 cucharada"
+      },
+      {
+        "name": "Tomillo",
+        "quantity": "1 cucharada picado"
+      },
+      {
+        "name": "Vino blanco",
+        "quantity": "150 ml"
+      },
+      {
+        "name": "Caldo de pollo",
+        "quantity": "800 ml"
+      },
+      {
+        "name": "Arroz",
+        "quantity": "400 g"
+      },
+      {
+        "name": "Perejil",
+        "quantity": "2 cucharadas picado"
+      }
+    ],
+    "category_id": 3,
+    "user_id": 2
+  }
+]

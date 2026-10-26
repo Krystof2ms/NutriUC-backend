@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Akira Tanaka",
+    "email": "akira@example.com",
+    "avatar_key": null,
+    "password_hash": null,
+    "status": "active",
+    "role_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Lucía Herrera",
+    "email": "lucia@example.com",
+    "avatar_key": null,
+    "password_hash": null,
+    "status": "active",
+    "role_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Marco Rossi",
+    "email": "marco@example.com",
+    "avatar_key": null,
+    "password_hash": "$argon2i$v=19$m=16,t=2,p=1$MzEyMzIxMzEyMzIxYXNk$w7Mb+Rqosgz2/Oa3HqQlGg",
+    "status": "active",
+    "role_id": 1
+  }
+]

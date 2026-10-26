@@ -1,0 +1,8 @@
+compose.prod.yaml
+compose.yaml
+Dockerfile.dev
+Dockerfile
+README.md
+.venv
+__pycache__/
+.git/

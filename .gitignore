@@ -1,0 +1,16 @@
+# dependencies
+.venv
+
+# editor config
+.vscode/settings.json
+.zed
+
+# environments
+.env*
+!.env.example
+
+# python
+__pycache__
+
+# backend
+resources.temp/

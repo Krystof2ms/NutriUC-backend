@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Consume más verduras",
+    "slug": "consume-verduras-123",
+    "content": "Incluye vegetales frescos en al menos dos comidas al día.",
+    "category_id": 4,
+    "user_id": 1
+  },
+  {
+    "id": 2,
+    "title": "Ensalada mediterránea",
+    "slug": "ensalada-mediterranea-123",
+    "content": "Una mezcla saludable de tomate, aceitunas y queso fresco.",
+    "category_id": 5,
+    "user_id": 2
+  },
+  {
+    "id": 3,
+    "title": "Ceviche clásico",
+    "slug": "ceviche-clasico-123",
+    "content": "Receta tradicional de mariscos con limón y ají.",
+    "category_id": 5,
+    "user_id": 3
+  },
+  {
+    "id": 4,
+    "title": "Pollo al horno",
+    "slug": "pollo-horno-123",
+    "content": "Preparación sencilla de pollo con especias naturales.",
+    "category_id": 5,
+    "user_id": 1
+  },
+  {
+    "id": 5,
+    "title": "Hidratación diaria",
+    "slug": "hidratacion-diaria-123",
+    "content": "Beber suficiente agua mejora el rendimiento físico y mental.",
+    "category_id": 4,
+    "user_id": 2
+  },
+  {
+    "id": 6,
+    "title": "Tacos vegetarianos",
+    "slug": "tacos-vegetarialos-123",
+    "content": "Tacos rellenos de champiñones, palta y verduras.",
+    "category_id": 5,
+    "user_id": 3
+  },
+  {
+    "id": 7,
+    "title": "Arroz con mariscos",
+    "slug": "arroz-mariscos-123",
+    "content": "Plato marino acompañado de arroz sazonado.",
+    "category_id": 5,
+    "user_id": 1
+  },
+  {
+    "id": 8,
+    "title": "Pollo a la plancha",
+    "slug": "pollo-plancha-123",
+    "content": "Receta ligera y rica en proteínas para el almuerzo.",
+    "category_id": 3,
+    "user_id": 2
+  },
+  {
+    "id": 9,
+    "title": "Descanso adecuado",
+    "slug": "descanso-adecudo-123",
+    "content": "Dormir al menos 7 horas ayuda a mantener buena salud.",
+    "category_id": 4,
+    "user_id": 3
+  },
+  {
+    "id": 10,
+    "title": "Hamburguesa vegetariana",
+    "slug": "hamburguesa-vegetariana-123",
+    "content": "Hamburguesa hecha con lentejas y vegetales frescos.",
+    "category_id": 5,
+    "user_id": 1
+  }
+]

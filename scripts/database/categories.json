@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Vegetariano",
+    "description": "Recetas de categoría Vegetariano",
+    "type": "recipe"
+  },
+  {
+    "id": 2,
+    "name": "Marisco",
+    "description": "Recetas de categoría Marisco",
+    "type": "recipe"
+  },
+  {
+    "id": 3,
+    "name": "Pollo",
+    "description": "Recetas de categoría Pollo",
+    "type": "recipe"
+  },
+  {
+    "id": 4,
+    "name": "Salud",
+    "description": "Tips de salud",
+    "type": "tip"
+  },
+  {
+    "id": 5,
+    "name": "Cocina",
+    "description": "Tips de cocina",
+    "type": "tip"
+  }
+]

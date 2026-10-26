@@ -111,7 +111,7 @@ flowchart TD
 
     %% Client Interactions
     Client -->|"HTTP Requests (Cookies: JWT)"| Middleware_Stack
-    Client <-->|"SSE Event Stream"| SSERoutes
+    SSERoutes -->|"SSE Event Stream"| Client
     Middleware_Stack --> API_Layer
 
     %% API to Services

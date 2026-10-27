@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 
-class MessageResponse(BaseModel):
-    message: str
+class MessageResponse[T = str](BaseModel):
+    message: T
 
 
 class MessageError(BaseModel):

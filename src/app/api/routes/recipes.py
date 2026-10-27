@@ -83,7 +83,7 @@ async def getImage(id: int, conn: Connection = Depends(get_db)):
 @router.post(
     "/recipe",
     responses={404: {"model": MessageError, "description": "Recipe not found"}},
-    response_model=MessageResponse,
+    response_model=MessageResponse[int],
     status_code=status.HTTP_201_CREATED,
 )
 async def create(
@@ -96,7 +96,7 @@ async def create(
     new = data.to_create()
     id = await RecipeService.create(conn, new, category_id, int(access_token.sub))
 
-    return JSONResponse({"message": str(id)}, status_code=status.HTTP_201_CREATED)
+    return JSONResponse({"message": id}, status_code=status.HTTP_201_CREATED)
 
 
 @router.patch(

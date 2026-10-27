@@ -94,11 +94,9 @@ async def create(
 ):
     category_id = registry.get(data.category)
     new = data.to_create()
-    _ = await RecipeService.create(conn, new, category_id, int(access_token.sub))
+    id = await RecipeService.create(conn, new, category_id, int(access_token.sub))
 
-    return JSONResponse(
-        {"message": "Recipes create"}, status_code=status.HTTP_201_CREATED
-    )
+    return JSONResponse({"message": str(id)}, status_code=status.HTTP_201_CREATED)
 
 
 @router.patch(
@@ -132,7 +130,7 @@ async def update(
 )
 async def updateAvatar(
     id: int,
-    avatar: Annotated[UploadFile, File()],
+    image: Annotated[UploadFile, File()],
     access_token: AccessTokenPayload = Depends(get_profile),
 ):
     user_id = int(access_token.sub)
@@ -143,7 +141,7 @@ async def updateAvatar(
     source_path = recipe_dir / filename
 
     with source_path.open("wb") as file:
-        while chunk := await avatar.read(1024 * 1024):
+        while chunk := await image.read(1024 * 1024):
             file.write(chunk)
 
     job = ProcessRecipeImage.new(user_id=user_id, recipe_id=id, source_path=source_path)

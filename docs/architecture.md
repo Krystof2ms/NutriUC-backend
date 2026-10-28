@@ -451,11 +451,12 @@ flowchart TD
     Exc -->|Is ServiceError?| SE["service_error_handler"]
     Exc -->|Is RepositoryError?| RE["repo_error_handler"]
     Exc -->|Is RequestValidationError?| VE["validation_error_handler"]
-    Exc -->|Unhandled / Other| Standard["FastAPI Default 500 Handler"]
+    Exc -->|Unhandled / Other| Standard["internal_server_error"]
 
     SE -->|"HTTP status_code, JSON {'detail': exc.detail}"| Response["JSON Response to Client"]
-    RE -->|"HTTP status_code, JSON {'detail': exc.detail}"| Response
+    RE -->|"HTTP status_code, JSON {'detail': exc.detail}"| Response["JSON Response to Client"]
     VE -->|"HTTP 422, JSON {'code': 'VALIDATION_ERROR', 'errors': [...]}"| Response
+    Standard -->|"HTTP 500, JSON {'detail': exc.detail}"| Response["JSON Response to Client"]
 ```
 
 - **Domain Errors**:

@@ -53,13 +53,13 @@ async def getAvatar(conn: Connection, user_id: str) -> Path:
 
 
 @trace(TraceLayer.SERVICE)
-async def getUserDB(conn: Connection, user_id: int, role_id: int | None) -> UserDB:
+async def getUserDB(conn: Connection, user_id: int, role: str | None = None) -> UserDB:
     user = await UserRepo.getById(conn, user_id)
 
     if user is None:
         raise UserNotFoundError()
 
-    if role_id is not None and user.role_id != role_id:
+    if role is not None and user.role != role:
         raise UserUnauthorizedError()
 
     return user

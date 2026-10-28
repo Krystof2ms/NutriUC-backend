@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from app.api.responses.common import MessageResponse
 from app.api.responses.definitions import COMMON_RESPONSES
 from app.api.responses.errors import ErrorResponse
-from app.api.schemas.auth import CookieRefresh, LoginForm
+from app.api.schemas.auth import AuthResponse, CookieRefresh, LoginForm
 from app.core.cookies import (
     ACCESS_TOKEN_COOKIE,
     KEY_ACCESS_TOKEN_COOKIE,
@@ -24,7 +24,7 @@ router = APIRouter(prefix="/auth", tags=["auth"], responses=COMMON_RESPONSES)
 
 @router.post(
     "/login",
-    response_model=MessageResponse,
+    response_model=MessageResponse[AuthResponse],
     responses={
         400: {"model": ErrorResponse, "description": "User Invalid credentials"}
     },
@@ -33,11 +33,11 @@ async def login(
     data: Annotated[LoginForm, Form()],
     conn: Connection = Depends(get_db),  # noqa: B008
 ):
-    acess_token, refresh_token, _ = await AuthService.login(
+    acess_token, refresh_token, user = await AuthService.login(
         conn, data.email, data.password
     )
 
-    response = JSONResponse({"message": "login sussed"})
+    response = JSONResponse({"message": {"text": "successful login", "role": user.role}})
     response.set_cookie(
         key=KEY_ACCESS_TOKEN_COOKIE,
         value=acess_token,

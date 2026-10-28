@@ -1,5 +1,5 @@
 from datetime import UTC, datetime, timedelta
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import jwt
 from pydantic_core import ValidationError
@@ -38,7 +38,7 @@ async def generateAccessToken(
 @trace(TraceLayer.SERVICE)
 async def generateRefreshToken(
     user_id: int, expires_delta: timedelta = REFRESH_TOKEN_EXPIRE_MINUTES
-) -> tuple[str, str, datetime]:
+) -> tuple[str, UUID, datetime]:
     """
     Generate a refresh token for the given user.
 
@@ -48,9 +48,9 @@ async def generateRefreshToken(
             - jti: The unique identifier of the token.
             - datetime: expire time
     """
-    jti = str(uuid4())
+    jti = uuid4()
     expire = datetime.now(UTC) + expires_delta
-    payload = RefreshTokenPayload.model_construct(sub=str(user_id), jti=jti, exp=expire)
+    payload = RefreshTokenPayload.model_construct(sub=str(user_id), jti=str(jti), exp=expire)
 
     return (
         jwt.encode(  # pyright: ignore[reportUnknownMemberType]

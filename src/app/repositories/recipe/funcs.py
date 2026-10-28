@@ -1,6 +1,5 @@
 # pyright: reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false
 
-import json
 from dataclasses import asdict
 
 from asyncpg import (  # pyright: ignore[reportMissingTypeStubs]

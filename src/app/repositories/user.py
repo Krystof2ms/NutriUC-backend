@@ -50,8 +50,21 @@ async def getByEmail(conn: Connection, email: str) -> UserDB | None:
     try:
         row = await conn.fetchrow(
             f"""
-            SELECT id, name, email, password_hash, status, role_id, created_at, updated_at, avatar_key, public_id
-                FROM {TablesName.USER} WHERE email = $1
+            SELECT
+                u.id,
+                u.name,
+                u.email,
+                u.password_hash,
+                u.status,
+                r.name AS role,
+                u.created_at,
+                u.updated_at,
+                u.avatar_key,
+                u.public_id
+            FROM {TablesName.USER} u
+            INNER JOIN {TablesName.ROLE} r
+                ON u.role_id = r.id
+            WHERE u.email = $1
             """,
             email,
         )
@@ -61,7 +74,7 @@ async def getByEmail(conn: Connection, email: str) -> UserDB | None:
     if row is None:
         return None
 
-    return UserDB(**row)
+    return UserDB(**dict(row))
 
 
 @trace(TraceLayer.REPO)
@@ -88,8 +101,21 @@ async def getByPublicId(conn: Connection, id: str) -> UserDB | None:
     try:
         row = await conn.fetchrow(
             f"""
-            SELECT id, name, email, password_hash, status, role_id, created_at, updated_at, avatar_key, public_id
-                FROM {TablesName.USER} WHERE public_id = $1
+            SELECT
+                u.id,
+                u.name,
+                u.email,
+                u.password_hash,
+                u.status,
+                r.name AS role,
+                u.created_at,
+                u.updated_at,
+                u.avatar_key,
+                u.public_id
+            FROM {TablesName.USER} u
+            INNER JOIN {TablesName.ROLE} r
+                ON u.role_id = r.id
+            WHERE u.public_id = $1
             """,
             id,
         )
@@ -107,8 +133,21 @@ async def getById(conn: Connection, id: int) -> UserDB | None:
     try:
         row = await conn.fetchrow(
             f"""
-            SELECT id, name, email, password_hash, status, role_id, created_at, updated_at, avatar_key, public_id
-                FROM {TablesName.USER} WHERE id = $1
+            SELECT
+                u.id,
+                u.name,
+                u.email,
+                u.password_hash,
+                u.status,
+                r.name AS role,
+                u.created_at,
+                u.updated_at,
+                u.avatar_key,
+                u.public_id
+            FROM {TablesName.USER} u
+            INNER JOIN {TablesName.ROLE} r
+                ON u.role_id = r.id
+            WHERE u.id = $1
             """,
             id,
         )

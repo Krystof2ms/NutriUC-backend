@@ -50,8 +50,8 @@ class UserUpdate(BaseModel):
 
 @dataclass(frozen=True, kw_only=True)
 class UserDB(BaseUser):
-    id: str
-    role_id: int
+    id: int
+    role: str
     status: UserStatus
     password_hash: str | None
     avatar_key: str | None

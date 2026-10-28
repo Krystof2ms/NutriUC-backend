@@ -45,10 +45,9 @@ async def summary(
 async def me(
     access_token: AccessTokenPayload = Depends(get_profile),
     conn: Connection = Depends(get_db),
-    registry: RoleRegistry = Depends(get_role_registry),
 ):
     user = await UserService.getUserDB(
-        conn, int(access_token.sub), registry.get("user")
+        conn, int(access_token.sub), "user"
     )
 
     data = user.to_summary_me()

@@ -7,6 +7,7 @@ from app.context_manager import lifespan
 from app.core.config import TraceLayer, settings
 from app.core.middleware.develop import debug_request, time_log_requests
 from app.core.middleware.exceptions import (
+    internal_server_error,
     repo_error_handler,
     service_error_handler,
     validation_error_handler,
@@ -25,6 +26,7 @@ if TraceLayer.API in settings.TRACE_LAYERS and settings.FASTAPI_ENV == "developm
 app.add_exception_handler(ServiceError, service_error_handler)
 app.add_exception_handler(RequestValidationError, validation_error_handler)
 app.add_exception_handler(RepositoryError, repo_error_handler)
+app.add_exception_handler(Exception, internal_server_error)
 
 app.add_middleware(
     CORSMiddleware,

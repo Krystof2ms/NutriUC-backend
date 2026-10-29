@@ -25,5 +25,14 @@
     "password_hash": "$argon2i$v=19$m=16,t=2,p=1$MzEyMzIxMzEyMzIxYXNk$w7Mb+Rqosgz2/Oa3HqQlGg",
     "status": "active",
     "role_id": 1
+  },
+  {
+    "id": 4,
+    "name": "admin",
+    "email": "admin@NutriUC.com",
+    "avatar_key": null,
+    "password_hash": "$argon2i$v=19$m=16,t=2,p=1$MzEyMzIxMzEyMzIxYXNk$w7Mb+Rqosgz2/Oa3HqQlGg",
+    "status": "active",
+    "role_id": 2
   }
 ]

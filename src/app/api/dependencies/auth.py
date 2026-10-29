@@ -12,6 +12,7 @@ from app.services.auth import service as AuthService
 from app.services.auth.errors import AuthServiceError
 from app.services.token import service as TokenService
 from app.services.token.errors import InvalidAccessTokenError
+from app.services.user import service as UserService
 
 
 async def get_cookies_auth(cookies: Annotated[CookiesAuth, Cookie()]):
@@ -75,3 +76,18 @@ async def get_profile_optional(
     access: AccessTokenPayload | None = Depends(get_cookies_auth_optional),  # noqa: B008
 ) -> AccessTokenPayload | None:
     return access
+
+
+async def require_admin(
+    access_token: AccessTokenPayload = Depends(get_profile),  # noqa: B008
+    db: Connection = Depends(get_db),  # noqa: B008
+) -> AccessTokenPayload:
+    user = await UserService.getUserDB(conn=db, user_id=int(access_token.sub))
+
+    if user.role.lower() != "admin":
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            detail="Admin role required",
+        )
+
+    return access_token

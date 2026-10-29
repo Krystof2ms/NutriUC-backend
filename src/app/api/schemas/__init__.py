@@ -1,13 +1,17 @@
-from app.api.schemas.auth import (
+from app.models.category import CategoryType
+from app.models.user import UserStatus
+
+from .auth import (
     AccessTokenPayload,
     CookieRefresh,
     CookiesAuth,
     LoginForm,
     RefreshTokenPayload,
 )
-from app.api.schemas.category import Category, CategoryCreate, CategoryUpdate
-from app.api.schemas.pagination import CursorPage
-from app.api.schemas.recipe import (
+from .category import Category, CategoryCreate, CategoryUpdate
+from .event import Event
+from .pagination import CursorPage
+from .recipe import (
     Ingredient,
     Instruction,
     RecipeBase,
@@ -17,9 +21,9 @@ from app.api.schemas.recipe import (
     RecipeQueryDTO,
     RecipeUpdate,
 )
-from app.api.schemas.role import Role, RoleCreate, RoleUpdate
-from app.api.schemas.session import SessionCreate, SessionDB
-from app.api.schemas.tip import (
+from .role import Role, RoleCreate, RoleUpdate
+from .session import SessionCreate, SessionDB
+from .tip import (
     TipBase,
     TipCreate,
     TipCreateDTO,
@@ -27,7 +31,7 @@ from app.api.schemas.tip import (
     TipQueryDTO,
     TipUpdate,
 )
-from app.api.schemas.user import (
+from .user import (
     BaseUser,
     UserCreate,
     UserCreateDTO,
@@ -36,8 +40,6 @@ from app.api.schemas.user import (
     UserSummaryMe,
     UserUpdate,
 )
-from app.models.category import CategoryType
-from app.models.user import UserStatus
 
 __all__ = [
     "AccessTokenPayload",
@@ -49,6 +51,7 @@ __all__ = [
     "CookieRefresh",
     "CookiesAuth",
     "CursorPage",
+    "Event",
     "Ingredient",
     "Instruction",
     "LoginForm",

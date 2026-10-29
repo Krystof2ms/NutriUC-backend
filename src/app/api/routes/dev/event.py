@@ -12,7 +12,7 @@ from app.core.events.manager import event_manager
 router = APIRouter(prefix="/event")
 
 
-@router.get("/connect")
+@router.get("/connect/me")
 async def dev_event_stream(
     access_token: AccessTokenPayload = Depends(require_admin),
 ):
@@ -28,6 +28,34 @@ async def dev_event_stream(
                 yield event
         finally:
             await event_manager.disconnect(user_id, queue)
+
+    return EventSourceResponse(generator())
+
+
+@router.get("/connect/all")
+async def dev_all_event_stream(
+    event_type: str | None = None,
+    access_token: AccessTokenPayload = Depends(require_admin),
+):
+    queue = await event_manager.connect_global()
+
+    async def generator():
+        try:
+            yield {
+                "event": "connected",
+                "data": "dev event stream ready",
+            }
+
+            while True:
+                event = await queue.get()
+
+                if event_type and event.get("event") != event_type:
+                    continue
+
+                yield event
+
+        finally:
+            await event_manager.disconnect_global(queue)
 
     return EventSourceResponse(generator())
 

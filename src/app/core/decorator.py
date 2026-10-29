@@ -39,7 +39,14 @@ def trace(layer: TraceLayer, skip_params: set[str] | None = None):
             )
 
             try:
-                return await func(*args, **kwargs)
+                result = await func(*args, **kwargs)
+                logger.info(
+                    "%s | %s | result=%s",
+                    layer.value,
+                    func.__name__,
+                    result,
+                )
+                return result
             except Exception as exc:
                 logger.exception(
                     "%s | %s | %s | %s",

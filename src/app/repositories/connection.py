@@ -22,8 +22,9 @@ pool: asyncpg.Pool
 def init_logger(logger: logging.Logger):
     def pg_query_logger(record: QueryLogRecord) -> None:
         logger.debug(
-            "%s | %.2f ms",
+            "SQL: %s | ARGS: %s | %.2f ms",
             record.query,
+            record.args,
             record.elapsed * 1000,
         )
 

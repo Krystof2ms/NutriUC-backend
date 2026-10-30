@@ -22,7 +22,7 @@ class RecipeImageChanged(Event[dict[str, str]]):
 @dataclass(frozen=True)
 class RecipeImageRejected(Event[dict[str, str]]):
     event: str = field(
-        default="user.image_rejected",
+        default="recipe.image_rejected",
         init=False,
     )
 

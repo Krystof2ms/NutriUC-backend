@@ -15,7 +15,7 @@ from app.core.logger import logger
 router = APIRouter(prefix="/events", tags=["events"])
 
 
-@router.get("/events")
+@router.get("/connect")
 async def events_endpoint(
     request: Request,
     access_token: AccessTokenPayload = Depends(get_profile),
@@ -26,8 +26,12 @@ async def events_endpoint(
     async def generator():
         try:
             yield ServerSentEvent(
-                event="connected",
-                data="Hello",
+                event="server.connected",
+                data=json.dumps(
+                    {
+                        "status": "connected",
+                    }
+                ),
             )
 
             while True:

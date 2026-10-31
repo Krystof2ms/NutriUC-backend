@@ -10,7 +10,7 @@ class EventBaseModel(ABC):
 
 
 @dataclass(frozen=True)
-class Event[T](EventBaseModel, ABC):
+class Event[T = dict[str, str]](EventBaseModel, ABC):
     event: str
     data: T
 

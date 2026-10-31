@@ -36,14 +36,6 @@ async def events_endpoint(
 
                 event = await queue.get()
 
-                logger.info("SSE: queue event received: %r", event)
-                logger.info("Event type: %s", type(event))
-                logger.info("Event content: %r", event)
-
-                if isinstance(event, dict):
-                    logger.info("Event name: %r", event.get("event"))
-                    logger.info("Event data: %r", event.get("data"))
-
                 yield ServerSentEvent(
                     event=event["event"],
                     data=json.dumps(event["data"]),

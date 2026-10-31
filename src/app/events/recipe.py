@@ -4,7 +4,7 @@ from .base import Event
 
 
 @dataclass(frozen=True)
-class RecipeImageChanged(Event[dict[str, str]]):
+class RecipeImageChanged(Event):
     event: str = field(
         default="recipe.image_changed",
         init=False,
@@ -20,7 +20,7 @@ class RecipeImageChanged(Event[dict[str, str]]):
 
 
 @dataclass(frozen=True)
-class RecipeImageRejected(Event[dict[str, str]]):
+class RecipeImageRejected(Event):
     event: str = field(
         default="recipe.image_rejected",
         init=False,

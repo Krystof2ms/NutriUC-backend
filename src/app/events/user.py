@@ -4,14 +4,14 @@ from .base import Event
 
 
 @dataclass(frozen=True)
-class UserAvatarChanged(Event[dict[str, str]]):
+class UserAvatarChanged(Event):
     event: str = field(
         default="user.image_changed",
         init=False,
     )
 
     @classmethod
-    def new(cls) -> "UserAvatarChanged":
+    def new(cls) -> UserAvatarChanged:
         return cls(
             data={
                 "message": "avatar accept",
@@ -20,7 +20,7 @@ class UserAvatarChanged(Event[dict[str, str]]):
 
 
 @dataclass(frozen=True)
-class UserAvatarRejected(Event[dict[str, str]]):
+class UserAvatarRejected(Event):
     event: str = field(
         default="user.image_rejected",
         init=False,

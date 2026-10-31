@@ -1,12 +1,16 @@
 # pyright: reportCallInDefaultInitializer=false
 # ruff: noqa: B008
 
+import json
+
 from fastapi import APIRouter, Depends, Request
+from sse_starlette.event import ServerSentEvent
 from sse_starlette.sse import EventSourceResponse
 
 from app.api.dependencies.auth import get_profile
 from app.api.schemas import AccessTokenPayload
 from app.core.events.manager import event_manager
+from app.core.logger import logger
 
 router = APIRouter(prefix="/events", tags=["events"])
 
@@ -21,10 +25,10 @@ async def events_endpoint(
 
     async def generator():
         try:
-            yield {
-                "event": "connected",
-                "data": "Hello",
-            }
+            yield ServerSentEvent(
+                event="connected",
+                data="Hello",
+            )
 
             while True:
                 if await request.is_disconnected():
@@ -32,7 +36,18 @@ async def events_endpoint(
 
                 event = await queue.get()
 
-                yield event
+                logger.info("SSE: queue event received: %r", event)
+                logger.info("Event type: %s", type(event))
+                logger.info("Event content: %r", event)
+
+                if isinstance(event, dict):
+                    logger.info("Event name: %r", event.get("event"))
+                    logger.info("Event data: %r", event.get("data"))
+
+                yield ServerSentEvent(
+                    event=event["event"],
+                    data=json.dumps(event["data"]),
+                )
 
         finally:
             await event_manager.disconnect(user_id, queue)

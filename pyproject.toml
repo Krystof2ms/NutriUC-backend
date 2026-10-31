@@ -26,7 +26,12 @@ build-backend = "uv_build"
 entrypoint = "app.main:app"
 
 [dependency-groups]
-dev = ["poethepoet>=0.48.0", "pyright>=1.1.414", "ruff>=0.16.7"]
+dev = [
+    "httpx>=0.28.1",
+    "poethepoet>=0.48.0",
+    "pyright>=1.1.414",
+    "ruff>=0.16.7",
+]
 
 
 [tool.poe.tasks.app]
@@ -49,3 +54,11 @@ args = [
 
 [tool.poe.tasks.compile]
 cmd = "python -m compileall -q src"
+
+[tool.poe.tasks.scripts]
+help = "Run a Python script with arguments"
+cmd = "uv run --env-file ${env_file} ${script} ${extra_args}"
+args = [
+    { name = "script", positional = true, help = "Python script path" },
+    { name = "env_file", options = ["--env-file"], default = ".env", help = "Environment file path" },
+]

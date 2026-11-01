@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 from app.context_manager import lifespan
 from app.core.config import TraceLayer, settings
-from app.core.middleware.develop import debug_request, time_log_requests
+from app.core.logger import logger
+from app.core.middleware.debug import DebugMiddleware, list_routes, time_log_requests
 from app.core.middleware.exceptions import (
     internal_server_error,
     repo_error_handler,
@@ -21,7 +22,7 @@ if settings.FASTAPI_ENV == "development":
     _ = app.middleware("http")(time_log_requests)
 
 if TraceLayer.API in settings.TRACE_LAYERS and settings.FASTAPI_ENV == "development":
-    _ = app.middleware("http")(debug_request)
+    app.add_middleware(DebugMiddleware)
 
 app.add_exception_handler(ServiceError, service_error_handler)
 app.add_exception_handler(RequestValidationError, validation_error_handler)
@@ -37,6 +38,10 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+if settings.FASTAPI_ENV == "development":
+    logger.info("list routes:")
+    list_routes(app.routes)
 
 if settings.FRONTEND_DIR:
     app.frontend("/", directory=settings.FRONTEND_DIR)

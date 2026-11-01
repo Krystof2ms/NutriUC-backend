@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
 
         logger.info("Database connection established")
 
-    except ConnectionRefusedError as e:
+    except ConnectionRefusedError:
         logger.exception("Application database startup failed")
         raise
 
@@ -68,7 +68,7 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         logger.info("Shutting down application")
-        logger.info("Stop runinng workers")
+        logger.info("Stop running workers")
 
         worker_task_avatar.cancel()
         try:

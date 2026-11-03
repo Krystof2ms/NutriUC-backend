@@ -27,7 +27,7 @@
 - [Environment Variables](#environment-variables)
 - [Available Poe Tasks](#available-poe-tasks)
 - [API Endpoints Overview](#api-endpoints-overview)
-- [Real-Time Events (SSE) & Background Workers](#real-time-events-sse--background-workers)
+- [Real-Time Events (WebSocket) & Background Workers](#real-time-events-websocket--background-workers)
 - [Docker & Containerized Deployment](#docker--containerized-deployment)
 - [Code Quality & Linting](#code-quality--linting)
 - [License](#license)
@@ -53,7 +53,7 @@ Instead of heavy Object-Relational Mappers (ORMs), the backend utilizes native a
   - Password hashing powered by **Argon2id** (`pwdlib`).
 - **Keyset / Cursor-Based Pagination:** Efficient $O(\log N)$ bidirectional pagination for large recipe and tip catalogs without `OFFSET` bottlenecks.
 - **Non-Blocking Background Workers:** In-memory job queues (`asyncio.Queue`) for CPU-heavy image cropping, Lanczos resampling, and WebP format conversion using **Pillow**.
-- **Real-Time Push Notifications (SSE):** Server-Sent Events (`sse-starlette`) stream background media processing updates (`user.image_changed`, `recipe.image_changed`) directly to clients.
+- **Real-Time Push Notifications (WebSocket):** WebSocket (`websockets`) stream background media processing updates (`user.image_changed`, `recipe.image_changed`) directly to clients.
 - **In-Memory Registry Caching:** Application-level caching for roles and categories initialized during lifespan startup.
 - **Configurable Multi-Layer Tracing:** Granular tracing across API, Service, Repository, Database SQL, Worker, and Event layers via custom `@trace` decorators.
 
@@ -61,18 +61,18 @@ Instead of heavy Object-Relational Mappers (ORMs), the backend utilizes native a
 
 ## Tech Stack
 
-| Component | Technology | Description |
-|---|---|---|
-| **Language** | Python 3.14+ | Modern async Python with static type annotations |
-| **Framework** | FastAPI 0.141+ | High-performance async web framework |
-| **Package Manager** | [uv](https://github.com/astral-sh/uv) | Ultra-fast Python package installer and resolver |
-| **Task Runner** | [Poe the Poet](https://github.com/nat-n/poethepoet) | Multi-task orchestration integrated with `pyproject.toml` |
-| **Database** | PostgreSQL 18 | Relational database with UUIDv7, identity columns, and JSONB |
-| **DB Driver** | `asyncpg` | Native, blazing-fast async PostgreSQL driver |
-| **Security & Auth** | `pwdlib[argon2]`, `PyJWT` | Modern password hashing and JSON Web Tokens |
-| **Media Processing** | Pillow (PIL) | EXIF correction, cropping, and WebP encoding |
-| **Real-Time Streaming** | `sse-starlette` | Asynchronous Server-Sent Events implementation |
-| **Linter & Type Checker** | `ruff`, `pyright` | Strict linting, formatting, and static type analysis |
+| Component                 | Technology                                          | Description                                                  |
+| ------------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
+| **Language**              | Python 3.14+                                        | Modern async Python with static type annotations             |
+| **Framework**             | FastAPI 0.141+                                      | High-performance async web framework                         |
+| **Package Manager**       | [uv](https://github.com/astral-sh/uv)               | Ultra-fast Python package installer and resolver             |
+| **Task Runner**           | [Poe the Poet](https://github.com/nat-n/poethepoet) | Multi-task orchestration integrated with `pyproject.toml`    |
+| **Database**              | PostgreSQL 18                                       | Relational database with UUIDv7, identity columns, and JSONB |
+| **DB Driver**             | `asyncpg`                                           | Native, blazing-fast async PostgreSQL driver                 |
+| **Security & Auth**       | `pwdlib[argon2]`, `PyJWT`                           | Modern password hashing and JSON Web Tokens                  |
+| **Media Processing**      | Pillow (PIL)                                        | EXIF correction, cropping, and WebP encoding                 |
+| **Real-Time Streaming**   | `websockets`                                        | Asynchronous WebSocket Events implementation                 |
+| **Linter & Type Checker** | `ruff`, `pyright`                                   | Strict linting, formatting, and static type analysis         |
 
 ---
 
@@ -88,11 +88,11 @@ For an in-depth breakdown of the design patterns, data flows, database schema, a
 │    Client    │       └────────────────┘       └──────────┬─────────┘
 └──────▲───────┘                │                          │
        │                        ▼                          ▼
-       │ SSE             ┌─────────────┐       ┌──────────────────────┐
-       └──────────────── │ Event / SSE │ <==== │ Repositories / asyncpg│
-                         └──────▲──────┘       └──────────┬───────────┘
-                                │                          │
-                         ┌──────┴──────┐                   ▼
+       │ SSE             ┌───────────------──┐       ┌───────────────────────┐
+       └──────────────── │ Event / WebSocket │ <==== │ Repositories / asyncpg│
+                         └──────▲──────────-─┘       └─────────┬─────────────┘
+                                │                              │
+                         ┌──────┴──────┐                       ▼
                          │ Async Queue │       ┌──────────────────────┐
                          │ & Workers   │       │    PostgreSQL 18     │
                          └─────────────┘       └──────────────────────┘
@@ -129,7 +129,7 @@ backend/
 │       ├── constants/         # Media limits and directory paths
 │       ├── context_manager.py # Lifespan context (DB pool, workers, registries)
 │       ├── core/              # Config, cookies, logger, queues, workers, tracing
-│       ├── events/            # SSE Event definitions
+│       ├── events/            # WebSocket Event definitions
 │       ├── jobs/              # Background job definitions
 │       ├── main.py            # FastAPI entrypoint and middleware setup
 │       ├── models/            # Domain models and database representations
@@ -194,6 +194,7 @@ uv run poe app --mode dev
 ```
 
 The API will be available at:
+
 - **Base API URL:** `http://localhost:3000/api/v1` (or port configured in `.env`)
 - **Interactive OpenAPI Docs (Swagger UI):** `http://localhost:3000/docs`
 - **ReDoc Documentation:** `http://localhost:3000/redoc`
@@ -202,16 +203,16 @@ The API will be available at:
 
 ## Environment Variables
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `DATABASE_URL` | String (PostgresDsn) | *Required* | PostgreSQL connection URI (`postgresql://user:pass@host:5432/dbname`) |
-| `JWT_SECRET` | String | *Required* | Secret key for signing and validating JWT tokens |
-| `FASTAPI_ENV` | String | `development` | Runtime environment: `development` or `production` |
-| `CORS_ORIGINS` | JSON Array (List[str]) | `["*"]` in dev | Allowed CORS origins (e.g., `["http://localhost:5173"]`). Wildcard `*` rejected in production |
-| `TRACE_LAYERS` | JSON Array (List[str]) | `[]` | Active tracing layers: `"api"`, `"service"`, `"repo"`, `"db"`, `"worker"`, `"events"` |
-| `API_V1_STR` | String | `/api/v1` | URL prefix for version 1 API endpoints |
-| `RESOURCES_DIR` | Path | `./resources.temp` | Directory path for saving processed media files (avatars, recipes) |
-| `FRONTEND_DIR` | Path (Optional) | `./dist/frontend` | Directory of compiled static frontend assets to serve (if enabled) |
+| Variable        | Type                   | Default            | Description                                                                                   |
+| --------------- | ---------------------- | ------------------ | --------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`  | String (PostgresDsn)   | _Required_         | PostgreSQL connection URI (`postgresql://user:pass@host:5432/dbname`)                         |
+| `JWT_SECRET`    | String                 | _Required_         | Secret key for signing and validating JWT tokens                                              |
+| `FASTAPI_ENV`   | String                 | `development`      | Runtime environment: `development` or `production`                                            |
+| `CORS_ORIGINS`  | JSON Array (List[str]) | `["*"]` in dev     | Allowed CORS origins (e.g., `["http://localhost:5173"]`). Wildcard `*` rejected in production |
+| `TRACE_LAYERS`  | JSON Array (List[str]) | `[]`               | Active tracing layers: `"api"`, `"service"`, `"repo"`, `"db"`, `"worker"`, `"events"`         |
+| `API_V1_STR`    | String                 | `/api/v1`          | URL prefix for version 1 API endpoints                                                        |
+| `RESOURCES_DIR` | Path                   | `./resources.temp` | Directory path for saving processed media files (avatars, recipes)                            |
+| `FRONTEND_DIR`  | Path (Optional)        | None               | Directory of compiled static frontend assets to serve (if enabled)                            |
 
 ---
 
@@ -243,54 +244,72 @@ uv run poe compile
 All endpoints are versioned under `/api/v1` (configurable via `API_V1_STR`):
 
 ### 🔐 Authentication (`/auth`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/auth/login` | Authenticate user, set `access_token` and `refresh_token` cookies | No |
-| `POST` | `/auth/refresh` | Validate refresh session and rotate access token | Via Refresh Cookie |
-| `POST` | `/auth/logout` | Revoke active session in DB and clear auth cookies | Yes |
+
+| Method | Endpoint        | Description                                                       | Auth Required      |
+| ------ | --------------- | ----------------------------------------------------------------- | ------------------ |
+| `POST` | `/auth/login`   | Authenticate user, set `access_token` and `refresh_token` cookies | No                 |
+| `POST` | `/auth/refresh` | Validate refresh session and rotate access token                  | Via Refresh Cookie |
+| `POST` | `/auth/logout`  | Revoke active session in DB and clear auth cookies                | Yes                |
 
 ### 👤 User Management (`/users`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/users/` | Register a new user | No |
-| `GET` | `/users/me` | Retrieve profile information of authenticated user | Yes |
-| `GET` | `/users/me/stats` | Retrieve user activity statistics (recipes, tips counts) | Yes |
-| `PATCH` | `/users/me` | Update authenticated user profile | Yes |
-| `PUT` | `/users/me/avatar` | Upload and crop user avatar (asynchronously processed) | Yes |
-| `DELETE` | `/users/me/avatar` | Delete user avatar | Yes |
-| `GET` | `/users/{id}/avatar` | Serve avatar image by user public ID | No |
+
+| Method   | Endpoint             | Description                                              | Auth Required |
+| -------- | -------------------- | -------------------------------------------------------- | ------------- |
+| `POST`   | `/users/`            | Register a new user                                      | No            |
+| `GET`    | `/users/me`          | Retrieve profile information of authenticated user       | Yes           |
+| `GET`    | `/users/me/stats`    | Retrieve user activity statistics (recipes, tips counts) | Yes           |
+| `PATCH`  | `/users/me`          | Update authenticated user profile                        | Yes           |
+| `PUT`    | `/users/me/avatar`   | Upload and crop user avatar (asynchronously processed)   | Yes           |
+| `DELETE` | `/users/me/avatar`   | Delete user avatar                                       | Yes           |
+| `GET`    | `/users/{id}/avatar` | Serve avatar image by user public ID                     | No            |
 
 ### 🥗 Recipes (`/recipes`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/recipes/search` | Search recipes with keyset pagination, category, and text filter | Optional |
-| `GET` | `/recipes/{id}` | Get full recipe details by ID | Optional |
-| `POST` | `/recipes/` | Create a new recipe | Yes |
-| `PATCH` | `/recipes/{id}` | Update recipe details (author only) | Yes |
-| `DELETE` | `/recipes/{id}` | Delete recipe (author only) | Yes |
-| `PUT` | `/recipes/{id}/img` | Upload recipe cover image (asynchronously processed) | Yes |
-| `GET` | `/recipes/recipe/{id}/img`| Serve recipe image file | No |
-| `DELETE` | `/recipes/recipe/{id}/img`| Remove recipe cover image | Yes |
+
+| Method   | Endpoint                   | Description                                                      | Auth Required |
+| -------- | -------------------------- | ---------------------------------------------------------------- | ------------- |
+| `GET`    | `/recipes/search`          | Search recipes with keyset pagination, category, and text filter | Optional      |
+| `GET`    | `/recipes/{id}`            | Get full recipe details by ID                                    | Optional      |
+| `POST`   | `/recipes/`                | Create a new recipe                                              | Yes           |
+| `PATCH`  | `/recipes/{id}`            | Update recipe details (author only)                              | Yes           |
+| `DELETE` | `/recipes/{id}`            | Delete recipe (author only)                                      | Yes           |
+| `PUT`    | `/recipes/{id}/img`        | Upload recipe cover image (asynchronously processed)             | Yes           |
+| `GET`    | `/recipes/recipe/{id}/img` | Serve recipe image file                                          | No            |
+| `DELETE` | `/recipes/recipe/{id}/img` | Remove recipe cover image                                        | Yes           |
 
 ### 💡 Healthy Tips (`/tips`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/tips/search` | Search tips with keyset pagination and category filters | Optional |
-| `GET` | `/tips/{id}` | Retrieve tip by ID | Optional |
-| `POST` | `/tips/` | Publish a new nutrition tip | Yes |
-| `PATCH` | `/tips/{id}` | Edit an existing tip (author only) | Yes |
-| `DELETE` | `/tips/{id}` | Remove tip (author only) | Yes |
+
+| Method   | Endpoint       | Description                                             | Auth Required |
+| -------- | -------------- | ------------------------------------------------------- | ------------- |
+| `GET`    | `/tips/search` | Search tips with keyset pagination and category filters | Optional      |
+| `GET`    | `/tips/{id}`   | Retrieve tip by ID                                      | Optional      |
+| `POST`   | `/tips/`       | Publish a new nutrition tip                             | Yes           |
+| `PATCH`  | `/tips/{id}`   | Edit an existing tip (author only)                      | Yes           |
+| `DELETE` | `/tips/{id}`   | Remove tip (author only)                                | Yes           |
 
 ### 🏷️ Categories & System (`/categories`, `/events`, `/ping`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/categories/names` | List registered recipe and tip categories | No |
-| `GET` | `/events/events` | Real-time Server-Sent Events (SSE) notification stream | Yes |
-| `GET` | `/ping` | Basic system health check | No |
+
+| Method | Endpoint            | Description                                            | Auth Required |
+| ------ | ------------------- | ------------------------------------------------------ | ------------- |
+| `GET`  | `/categories/names` | List registered recipe and tip categories              | No            |
+| `WS`   | `/events/connect`   | Real-time WebSocket stream for the authenticated user  | Yes           |
+| `GET`  | `/ping`             | Basic system health check                              | No            |
+
+### </> Development Tools (`/dev`)
+> [!WARNING]
+> **Admin role required**
+
+> [!IMPORTANT]
+> **Development mode only**
+#### 📢 Events (`/events`)
+| Method | Endpoint            | Description                                            | Auth Required |
+| ------ | ------------------- | ------------------------------------------------------ | ------------- |
+| `WS`  | `/connect/me`        | Real-time WebSocket stream for the authenticated user  | Yes           |
+| `WS`  | `/connect/all`       | Real-time WebSocket stream all system events           | Yes           |
+| `POST` | `/send/{id}`        | Send an event to a specific user                       | Yes           |
 
 ---
 
-## Real-Time Events (SSE) & Background Workers
+## Real-Time Events (WebSocket) & Background Workers
 
 1. When a client uploads an image (avatar or recipe photo), the endpoint immediately validates headers and saves a raw temporary file, enqueuing a job into `AvatarJobQueue` or `RecipeJobQueue`.
 2. The HTTP endpoint returns an immediate `200 OK` response without waiting for CPU-intensive transformation.
@@ -300,11 +319,13 @@ All endpoints are versioned under `/api/v1` (configurable via `API_V1_STR`):
    - Encodes image into modern **WebP** format.
    - Saves file to storage and updates database record.
 4. The worker dispatches a typed event (`UserAvatarChanged` or `RecipeImageChanged`) through `event_manager`.
-5. Connected clients listening on `GET /api/v1/events/events` receive real-time push updates over SSE:
+5. Connected clients listening on `WS /api/v1/events/connect` receive real-time push updates over WebSocket:
 
 ```json
-event: user.image_changed
-data: {"message": "avatar accept"}
+{
+  "event": "user.image_changed",
+  "data": { "message": "avatar accept" }
+}
 ```
 
 ---

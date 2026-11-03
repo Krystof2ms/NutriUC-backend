@@ -1,6 +1,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 
+from asyncpg import Pool
 from fastapi import FastAPI
 
 from app.core.config import settings
@@ -34,7 +35,17 @@ async def lifespan(app: FastAPI):
         logger.warning("Create resources dir")
         settings.RESOURCES_DIR.mkdir(parents=True, exist_ok=True)
 
-    pool = await connect()
+    pool: Pool
+
+    try:
+        pool = await connect()
+
+        logger.info("Database connection established")
+
+    except ConnectionRefusedError:
+        logger.exception("Application database startup failed")
+        raise
+
     logger.info("Database pool initialized")
 
     logger.info("Init Registers")
@@ -57,7 +68,7 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         logger.info("Shutting down application")
-        logger.info("Stop runinng workers")
+        logger.info("Stop running workers")
 
         worker_task_avatar.cancel()
         try:

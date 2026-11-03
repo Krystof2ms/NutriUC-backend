@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 from .base import Event
 
@@ -66,3 +67,12 @@ class ServerHeartbeat(Event):
                 "status": "alive",
             }
         )
+
+
+@dataclass(frozen=True)
+class ServerMessageDev(Event):
+    event: str
+
+    @classmethod
+    def new(cls, event: str, data: Any) -> ServerMessageDev:
+        return cls(event=event, data=data)

@@ -12,7 +12,7 @@
   - [4.4 Domain & Data Models (`app.models`)](#44-domain--data-models-appmodels)
   - [4.5 Core & Cross-Cutting Infrastructure (`app.core`)](#45-core--cross-cutting-infrastructure-appcore)
 - [5. Asynchronous Background Workers & Job Queues](#5-asynchronous-background-workers--job-queues)
-- [6. Real-Time Communication (Server-Sent Events)](#6-real-time-communication-server-sent-events)
+- [6. Real-Time Communication (WebSocket)](#6-real-time-communication-server-sent-events)
 - [7. Authentication & Session Management](#7-authentication--session-management)
 - [8. In-Memory Registry Pattern](#8-in-memory-registry-pattern)
 - [9. Database & Storage Architecture](#9-database--storage-architecture)
@@ -73,7 +73,11 @@ flowchart TD
             RecipeRoutes["/recipes (CRUD, Keyset Search, Img)"]
             TipRoutes["/tips (CRUD, Keyset Search)"]
             CatRoutes["/categories/names"]
-            SSERoutes["/events/events (SSE Stream)"]
+            EventRoutes["/events/connect (Websocket)"]
+
+            subgraph DevRouters["/dev / Tolls for development mode (role admin)"]
+                EventDevRoutes["/events (Websockets, Post event)"]
+            end
         end
 
         subgraph Service_Layer["Service Layer (app.services)"]
@@ -111,8 +115,10 @@ flowchart TD
 
     %% Client Interactions
     Client -->|"HTTP Requests (Cookies: JWT)"| Middleware_Stack
-    SSERoutes -->|"SSE Event Stream"| Client
+    EventRoutes -->|"Websocket Event Stream"| Client
     Middleware_Stack --> API_Layer
+    EventDevRoutes --> |"Post event dev"| EvtMgr
+    EventDevRoutes --> |"Websocket Event Stream (all or me)"| Client
 
     %% API to Services
     API_Layer --> Service_Layer
@@ -139,8 +145,8 @@ flowchart TD
     AvatarWorker -->|"Publish UserAvatarChanged"| EvtMgr
     RecipeWorker -->|"Publish RecipeImageChanged"| EvtMgr
 
-    %% SSE Dispatch
-    EvtMgr --> SSERoutes
+    %% Event Dispatch
+    EvtMgr --> EventRoutes
 
     %% Lifespan hooks
     Life -.->|"Pre-warms"| In_Memory_State
@@ -219,13 +225,13 @@ Image uploads (profile avatars and recipe covers) involve format validation, asp
      - Saves as WebP format to `RESOURCES_DIR/avatars/{avatar_key}.webp`.
      - Deletes previous avatar file from disk if present.
      - Updates `User.avatar_key` in the database.
-     - Dispatches real-time SSE event to notify the user.
+     - Dispatches WebSocket event to notify the user.
    - `RecipeWorker`:
      - Verifies image integrity.
      - Converts to RGB and resizes to `800x800` WebP format.
      - Saves to `RESOURCES_DIR/recipes/{image_key}.webp`.
      - Updates `Recipe.image_key` in the database.
-     - Dispatches real-time SSE event.
+     - Dispatches WebSocket event.
 4. **Lifecycle Integration (`app.context_manager`)**:
    - Workers run as background `asyncio.Task` instances started during FastAPI `lifespan`.
    - On shutdown, worker tasks are cleanly cancelled and drained before closing the database pool.
@@ -239,7 +245,7 @@ sequenceDiagram
     participant Worker as AvatarWorker
     participant Disk as Local File Storage
     participant DB as PostgreSQL
-    participant SSE as EventManager / SSE
+    participant WebSocket as EventManager / WebSocket
 
     Client->>API: PUT /users/me/avatar (Multipart File + Crop)
     API->>Disk: Save raw temporary file
@@ -251,23 +257,23 @@ sequenceDiagram
     Worker->>Disk: Read, EXIF transpose, Crop, Lanczos Resize to WebP
     Worker->>Disk: Delete raw temp file & old avatar
     Worker->>DB: UPDATE "User" SET avatar_key = $1
-    Worker->>SSE: publish(user_id, UserAvatarChanged)
-    SSE-->>Client: SSE Event: "user.image_changed" {"message": "avatar accept"}
+    Worker->>WebSocket: publish(user_id, UserAvatarChanged)
+    WebSocket-->>Client: WebSocket Event: "user.image_changed" {"message": "avatar accept"}
 ```
 
 ---
 
-## 6. Real-Time Communication (Server-Sent Events)
+## 6. Real-Time Communication (WebSocket)
 
-The application utilizes **Server-Sent Events (SSE)** via `sse-starlette` to establish a persistent unidirectional real-time channel between backend and client.
+The application utilizes **WebSocket** via `websocket` to establish a persistent unidirectional real-time channel between backend and client.
 
-- **Endpoint**: `GET /api/v1/events/events` (protected by `get_profile` authentication).
+- **Endpoint**: `GET /api/v1/events/connect` (protected by `get_profile` authentication).
 - **Manager (`app.core.events.manager.EventManager`)**:
   - Maintains an active dictionary mapping `user_id` to a set of `asyncio.Queue` instances.
   - Supports multiple concurrent tabs/devices for the same authenticated user.
   - Automatically cleans up disconnected queues when the client connection terminates.
 - **Events Dispatched**:
-  - `connected`: Emitted upon connection establishment.
+  - `server.connected`: Emitted upon connection establishment.
   - `user.image_changed`: Emitted when avatar processing finishes successfully.
   - `user.image_rejected`: Emitted if avatar validation or format checks fail.
   - `recipe.image_changed`: Emitted when recipe image processing finishes.
@@ -430,7 +436,7 @@ NutriUC includes a dedicated tracing and logging subsystem:
   - `"repo"`: Traces repository function calls and parameters.
   - `"db"`: Logs every raw SQL query and execution duration in milliseconds.
   - `"worker"`: Traces background queue processing jobs.
-  - `"events"`: Traces SSE publish and dispatch events.
+  - `"events"`: Traces WebSocket publish and dispatch events.
 - **Decorator Implementation (`@trace(layer)`)**:
   - Wrapped around functions across layers.
   - Automatically filters out sensitive or bulky arguments (`conn`, `request`, `response`).
@@ -474,6 +480,6 @@ flowchart TD
 While the current architecture is optimized for single-node deployments with low operational complexity, the decoupled design enables straightforward scaling:
 
 1. **Distributed Task Queue**: Replace in-memory `asyncio.Queue` with Celery, Redis Streams, or RabbitMQ for multi-instance worker pools.
-2. **Distributed Real-Time SSE**: Replace in-memory `EventManager` with a Redis Pub/Sub backplane to broadcast events across multiple load-balanced FastAPI instances.
+2. **Distributed WebSocket**: Replace in-memory `EventManager` with a Redis Pub/Sub backplane to broadcast events across multiple load-balanced FastAPI instances.
 3. **Cloud Object Storage**: Abstract local storage (`RESOURCES_DIR`) behind an S3-compatible interface (AWS S3, MinIO, Cloudflare R2) for media assets.
 4. **Database Read Replicas**: Route read-only queries (`RecipeRepo.getDtoWithParams`) to read replicas while routing write operations to the primary PostgreSQL node.

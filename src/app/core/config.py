@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Literal
 
 from pydantic import PostgresDsn, ValidationInfo, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 from app.core.logger import logger
 
@@ -18,10 +18,6 @@ class TraceLayer(StrEnum):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_parse_none_str="None",
-    )
-
     API_V1_STR: str = "/api/v1"
     FASTAPI_ENV: Literal["development", "production"] = "development"
     DATABASE_URL: PostgresDsn | None = None
@@ -29,7 +25,7 @@ class Settings(BaseSettings):
     TRACE_LAYERS: set[TraceLayer] = set()
     JWT_SECRET: str | None = None
     RESOURCES_DIR: Path = Path("./resources.temp")
-    FRONTEND_DIR: Path | None = Path("./dist/frontend")
+    FRONTEND_DIR: Path | None = None
 
     @field_validator("DATABASE_URL")
     @classmethod

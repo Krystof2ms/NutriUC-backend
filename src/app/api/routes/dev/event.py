@@ -10,7 +10,7 @@ from app.api.responses.common import MessageResponse
 from app.api.schemas import AccessTokenPayload, Event
 from app.core.events.manager import event_manager
 
-router = APIRouter(prefix="/event")
+router = APIRouter(prefix="/events")
 
 
 @router.websocket("/connect/me")

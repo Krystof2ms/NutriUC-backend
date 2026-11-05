@@ -36,12 +36,13 @@ dev = [
 
 [tool.poe.tasks.app]
 help = "Run the FastAPI application"
-cmd = "uv run --env-file ${env_file} fastapi ${mode}"
+cmd = "uv run --env-file ${env_file} fastapi ${mode} --port ${port}"
 args = [
     { name = "mode", default = "dev", choices = [
         "dev",
         "run",
     ], help = "Run mode: dev or production" },
+    { name = "port", default = "3000", help = "Run port (default 3000)"},
     { name = "env_file", default = ".env", help = "Env file to load (.env, .env.local, .env.production, etc)" },
 ]
 

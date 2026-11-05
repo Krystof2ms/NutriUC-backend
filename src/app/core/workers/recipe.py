@@ -10,9 +10,8 @@ from app.core.logger import logger
 from app.core.queue.recipe import RecipeJobQueue
 from app.events.recipe import RecipeImageChanged, RecipeImageRejected
 from app.jobs.recipe import ProcessRecipeImage
-from app.repositories import db_connection
 from app.repositories.errorrs import RepositoryError
-from app.repositories.recipe import RecipeRepo
+from app.repositories.interfaces.recipe import RecipeRepositoryInterface
 
 OUTPUT_IMAGE_FORMAT = "WEBP"
 OUTPUT_IMAGE_EXTENSION = ".webp"
@@ -20,8 +19,9 @@ IMAGE_SIZE = (800, 800)
 
 
 class RecipeWorker:
-    def __init__(self, queue: RecipeJobQueue) -> None:
+    def __init__(self, queue: RecipeJobQueue, recipe_repository: RecipeRepositoryInterface) -> None:
         self.queue = queue
+        self.recipe_repository = recipe_repository
 
     async def run(self) -> None:
         while True:
@@ -67,14 +67,13 @@ class RecipeWorker:
                     source_path,
                 )
 
-            async with db_connection() as conn:
-                try:
-                    await RecipeRepo.updateImage(conn, recipe_id, user_id, new_image_key)  # pyright: ignore[reportArgumentType]
-                except RepositoryError:
-                    logger.exception(
-                        "Failed to update recipe image_key: %s",
-                        source_path,
-                    )
+            try:
+                await self.recipe_repository.updateImage(recipe_id, user_id, new_image_key)
+            except RepositoryError:
+                logger.exception(
+                    "Failed to update recipe image_key: %s",
+                    source_path,
+                )
 
             await event_manager.publish(
                 user_id,

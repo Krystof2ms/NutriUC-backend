@@ -23,7 +23,7 @@ class ProcessUserAvatar(Job[ProcessUserAvatarData]):
     type: str = field(default="user.image_changed", init=False)
 
     @classmethod
-    def new(cls, user_id: int, source_path: Path, crop: Crop) -> "ProcessUserAvatar":
+    def new(cls, user_id: int, source_path: Path, crop: Crop) -> ProcessUserAvatar:
         return cls(
             data=ProcessUserAvatarData(
                 user_id=user_id,

@@ -9,5 +9,5 @@ class Job[T](ABC):
 
     @classmethod
     @abstractmethod
-    def new(cls, *args, **kwargs) -> "Job":
+    def new(cls, *args, **kwargs) -> Job:
         pass

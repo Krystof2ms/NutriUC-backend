@@ -1,10 +1,10 @@
-from asyncpg import Record
+from typing import Any
 
 from app.models.tip import TipDTO
 from app.models.user import UserSummary
 
 
-def parser_dto(row: Record) -> TipDTO:
+def parser_dto(row: Any) -> TipDTO:
     return TipDTO(
         id=row["id"],
         title=row["title"],
@@ -14,6 +14,6 @@ def parser_dto(row: Record) -> TipDTO:
         owner=UserSummary(
             public_id=row["owner_id"],
             name=row["owner_name"],
-            has_image=row["owner_avatar"]
+            has_image=row["owner_avatar"],
         ),
     )

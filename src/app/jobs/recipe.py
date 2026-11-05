@@ -18,7 +18,7 @@ class ProcessRecipeImage(Job[ProcessRecipeImageData]):
     @classmethod
     def new(
         cls, user_id: int, recipe_id: int, source_path: Path
-    ) -> "ProcessRecipeImage":
+    ) -> ProcessRecipeImage:
         return cls(
             data=ProcessRecipeImageData(
                 user_id=user_id,

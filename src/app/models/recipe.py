@@ -68,7 +68,8 @@ class RecipeDTO(RecipeBase):
         category: str,
         owner: UserSummary,
         created_at: datetime,
-    ) -> "RecipeDTO":
+        has_image: bool,
+    ) -> RecipeDTO:
         return cls(
             id=id,
             name=base.name,
@@ -79,4 +80,5 @@ class RecipeDTO(RecipeBase):
             category=category,
             owner=owner,
             created_at=created_at,
+            has_image=has_image,
         )

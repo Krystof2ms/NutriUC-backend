@@ -53,7 +53,28 @@ class TipRepository(TipRepositoryInterface):
             try:
                 rows: list[Any] = list(
                     await conn.fetch(
-                        f"\n            SELECT\n                t.id,\n                t.title,\n                t.content,\n                t.created_at,\n                t.updated_at,\n                t.user_id,\n                c.id AS category_id,\n                c.name AS category,\n                u.public_id AS owner_id,\n                u.name AS owner_name,\n                u.avatar_key IS NOT NULL AS owner_avatar\n            FROM {TablesName.TIP} t\n            INNER JOIN {TablesName.CATEGORY} c\n                ON t.category_id = c.id\n            INNER JOIN {TablesName.USER} u\n                ON t.user_id = u.id\n            {where}\n            ORDER BY t.id {direction.sql_order}\n            LIMIT ${limit_param}\n            ",
+                        f"""
+                        SELECT
+                            t.id,
+                            t.title,
+                            t.content,
+                            t.created_at,
+                            t.updated_at,
+                            t.user_id,
+                            c.id AS category_id,
+                            c.name AS category,
+                            u.public_id AS owner_id,
+                            u.name AS owner_name,
+                            u.avatar_key IS NOT NULL AS owner_avatar
+                        FROM {TablesName.TIP} t
+                        INNER JOIN {TablesName.CATEGORY} c
+                            ON t.category_id = c.id
+                        INNER JOIN {TablesName.USER} u
+                            ON t.user_id = u.id
+                        {where}
+                        ORDER BY t.id {direction.sql_order}
+                        LIMIT ${limit_param}
+                        """,
                         *params,
                     )
                 )
@@ -74,7 +95,15 @@ class TipRepository(TipRepositoryInterface):
                     ]
                     previous_where = f"WHERE {' AND '.join(previous_conditions)}"
                     has_previous = await conn.fetchval(
-                        f"\n                    SELECT EXISTS (\n                        SELECT 1\n                        FROM {TablesName.RECIPE} r\n                        INNER JOIN {TablesName.CATEGORY} c\n                            ON r.category_id = c.id\n                        {previous_where}\n                    )\n                ",
+                        f"""
+                        SELECT EXISTS (
+                            SELECT 1
+                            FROM {TablesName.RECIPE} r
+                            INNER JOIN {TablesName.CATEGORY} c
+                                ON r.category_id = c.id
+                            {previous_where}
+                        )
+                    """,
                         *previous_params,
                     )
                     previous_cursor = first_id if has_previous else None
@@ -94,7 +123,27 @@ class TipRepository(TipRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row: Any | None = await conn.fetchrow(
-                    f"\n            SELECT\n                t.id,\n                t.title,\n                t.content,\n                t.created_at,\n                t.updated_at,\n                t.user_id,\n                c.id AS category_id,\n                c.name AS category,\n                u.public_id AS owner_id,\n                u.name AS owner_name,\n                u.avatar_key IS NOT NULL AS owner_avatar\n            FROM {TablesName.TIP} t\n            INNER JOIN {TablesName.CATEGORY} c\n                ON t.category_id = c.id\n            INNER JOIN {TablesName.USER} u\n                ON t.user_id = u.id\n            WHERE\n                t.id = $1\n            ",
+                    f"""
+                    SELECT
+                        t.id,
+                        t.title,
+                        t.content,
+                        t.created_at,
+                        t.updated_at,
+                        t.user_id,
+                        c.id AS category_id,
+                        c.name AS category,
+                        u.public_id AS owner_id,
+                        u.name AS owner_name,
+                        u.avatar_key IS NOT NULL AS owner_avatar
+                    FROM {TablesName.TIP} t
+                    INNER JOIN {TablesName.CATEGORY} c
+                        ON t.category_id = c.id
+                    INNER JOIN {TablesName.USER} u
+                        ON t.user_id = u.id
+                    WHERE
+                        t.id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -110,7 +159,18 @@ class TipRepository(TipRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchval(
-                    f"\n            INSERT INTO {TablesName.TIP} (\n                title,\n                content,\n                category_id,\n                user_id\n            )\n            VALUES (\n                $1, $2, $3, $4\n            )\n            RETURNING id;\n            ",
+                    f"""
+                    INSERT INTO {TablesName.TIP} (
+                        title,
+                        content,
+                        category_id,
+                        user_id
+                    )
+                    VALUES (
+                        $1, $2, $3, $4
+                    )
+                    RETURNING id;
+                    """,
                     new.title,
                     new.content,
                     category_id,
@@ -139,7 +199,13 @@ class TipRepository(TipRepositoryInterface):
             user_id_param = id_param + 1
             try:
                 status = await conn.execute(
-                    f"\n            UPDATE {TablesName.TIP}\n            SET\n                {', '.join(set_parts)},\n                updated_at = NOW()\n            WHERE id = ${id_param} AND user_id = ${user_id_param}\n            ",
+                    f"""
+                    UPDATE {TablesName.TIP}
+                    SET
+                        {", ".join(set_parts)},
+                        updated_at = NOW()
+                    WHERE id = ${id_param} AND user_id = ${user_id_param}
+                    """,
                     *params,
                 )
             except DatabaseError as e:
@@ -152,7 +218,10 @@ class TipRepository(TipRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 status = await conn.execute(
-                    f"\n            DELETE FROM {TablesName.TIP}\n                WHERE id = $1 AND user_id = $2\n            ",
+                    f"""
+                    DELETE FROM {TablesName.TIP}
+                        WHERE id = $1 AND user_id = $2
+                    """,
                     recipe_id,
                     user_id,
                 )

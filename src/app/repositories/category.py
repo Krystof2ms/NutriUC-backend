@@ -23,7 +23,15 @@ class CategoryRepository(CategoryRepositoryInterface):
                 where = "WHERE type = $1"
             try:
                 rows = await conn.fetch(
-                    f"\n            SELECT\n                id,\n                name,\n                description,\n                type\n            FROM {TablesName.CATEGORY}\n            {where}\n            ",
+                    f"""
+                    SELECT
+                        id,
+                        name,
+                        description,
+                        type
+                    FROM {TablesName.CATEGORY}
+                    {where}
+                    """,
                     *([only_type] if only_type is not None else []),
                 )
             except DatabaseError as e:

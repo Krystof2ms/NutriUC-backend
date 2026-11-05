@@ -20,7 +20,18 @@ class SessionRepository(SessionRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT id, token_hash, jti, user_id, expires_at, revoked, created_at FROM {TablesName.SESSION}\n            WHERE jti = $1\n            ",
+                    f"""
+                    SELECT
+                        id,
+                        token_hash,
+                        jti,
+                        user_id,
+                        expires_at,
+                        revoked,
+                        created_at
+                    FROM {TablesName.SESSION}
+                    WHERE jti = $1
+                    """,
                     jti,
                 )
             except DatabaseError as e:
@@ -34,7 +45,13 @@ class SessionRepository(SessionRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchval(
-                    f"\n            INSERT INTO {TablesName.SESSION}\n                (token_hash, user_id, expires_at, jti)\n            VALUES\n                ($1, $2, $3, $4)\n            RETURNING id;\n            ",
+                    f"""
+                    INSERT INTO {TablesName.SESSION}
+                        (token_hash, user_id, expires_at, jti)
+                    VALUES
+                        ($1, $2, $3, $4)
+                    RETURNING id;
+                    """,
                     new.token_hash,
                     new.user_id,
                     new.expires_at,
@@ -51,7 +68,12 @@ class SessionRepository(SessionRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 status = await conn.execute(
-                    f"\n            UPDATE {TablesName.SESSION}\n            SET\n                revoked = true\n            WHERE id = $1\n            ",
+                    f"""
+                    UPDATE {TablesName.SESSION}
+                    SET
+                        revoked = true
+                    WHERE id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -64,7 +86,12 @@ class SessionRepository(SessionRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 status = await conn.execute(
-                    f"\n            UPDATE {TablesName.SESSION}\n            SET\n                revoked = true\n            WHERE jti = $1\n            ",
+                    f"""
+                    UPDATE {TablesName.SESSION}
+                    SET
+                        revoked = true
+                    WHERE jti = $1
+                    """,
                     jti,
                 )
             except DatabaseError as e:

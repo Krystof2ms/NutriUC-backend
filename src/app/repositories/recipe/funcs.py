@@ -26,7 +26,22 @@ class RecipeRepository(RecipeRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n        SELECT id, name, origin, instructions, ingredients, description, category_id, user_id, image_key, updated_at, created_at\n            FROM {TablesName.RECIPE} WHERE id = $1\n        ",
+                    f"""
+                    SELECT
+                        id,
+                        name,
+                        origin,
+                        instructions,
+                        ingredients,
+                        description,
+                        category_id,
+                        user_id,
+                        image_key,
+                        updated_at,
+                        created_at
+                    FROM {TablesName.RECIPE}
+                    WHERE id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -69,7 +84,30 @@ class RecipeRepository(RecipeRepositoryInterface):
             try:
                 rows: list[Any] = list(
                     await conn.fetch(
-                        f"\n            SELECT\n                r.id,\n                r.name,\n                r.origin,\n                r.instructions,\n                r.ingredients,\n                r.description,\n                r.created_at,\n                r.user_id,\n                r.image_key IS NOT NULL AS has_image,\n                c.name AS category,\n                u.public_id AS owner_id,\n                u.name AS owner_name,\n                u.avatar_key IS NOT NULL AS owner_avatar\n            FROM {TablesName.RECIPE} r\n            INNER JOIN {TablesName.CATEGORY} c\n                ON r.category_id = c.id\n            INNER JOIN {TablesName.USER} u\n                ON r.user_id = u.id\n            {where}\n            ORDER BY r.id {direction.sql_order}\n            LIMIT ${limit_param}\n            ",
+                        f"""
+                        SELECT
+                            r.id,
+                            r.name,
+                            r.origin,
+                            r.instructions,
+                            r.ingredients,
+                            r.description,
+                            r.created_at,
+                            r.user_id,
+                            r.image_key IS NOT NULL AS has_image,
+                            c.name AS category,
+                            u.public_id AS owner_id,
+                            u.name AS owner_name,
+                            u.avatar_key IS NOT NULL AS owner_avatar
+                        FROM {TablesName.RECIPE} r
+                        INNER JOIN {TablesName.CATEGORY} c
+                            ON r.category_id = c.id
+                        INNER JOIN {TablesName.USER} u
+                            ON r.user_id = u.id
+                        {where}
+                        ORDER BY r.id {direction.sql_order}
+                        LIMIT ${limit_param}
+                        """,
                         *params,
                     )
                 )
@@ -90,7 +128,15 @@ class RecipeRepository(RecipeRepositoryInterface):
                     ]
                     previous_where = f"WHERE {' AND '.join(previous_conditions)}"
                     has_previous = await conn.fetchval(
-                        f"\n                    SELECT EXISTS (\n                        SELECT 1\n                        FROM {TablesName.RECIPE} r\n                        INNER JOIN {TablesName.CATEGORY} c\n                            ON r.category_id = c.id\n                        {previous_where}\n                    )\n                ",
+                        f"""
+                        SELECT EXISTS (
+                            SELECT 1
+                            FROM {TablesName.RECIPE} r
+                            INNER JOIN {TablesName.CATEGORY} c
+                                ON r.category_id = c.id
+                            {previous_where}
+                        )
+                    """,
                         *previous_params,
                     )
                     previous_cursor = first_id if has_previous else None
@@ -110,7 +156,30 @@ class RecipeRepository(RecipeRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT\n                r.id,\n                r.name,\n                r.origin,\n                r.instructions,\n                r.ingredients,\n                r.description,\n                r.created_at,\n                r.updated_at,\n                r.user_id,\n                r.image_key IS NOT NULL AS has_image,\n                c.name AS category,\n                u.public_id AS owner_id,\n                u.name AS owner_name,\n                u.avatar_key IS NOT NULL owner_avatar\n            FROM {TablesName.RECIPE} r\n            INNER JOIN {TablesName.CATEGORY} c\n                ON r.category_id = c.id\n            INNER JOIN {TablesName.USER} u\n                ON r.user_id = u.id\n            WHERE\n                r.id = $1\n            ",
+                    f"""
+                    SELECT
+                        r.id,
+                        r.name,
+                        r.origin,
+                        r.instructions,
+                        r.ingredients,
+                        r.description,
+                        r.created_at,
+                        r.updated_at,
+                        r.user_id,
+                        r.image_key IS NOT NULL AS has_image,
+                        c.name AS category,
+                        u.public_id AS owner_id,
+                        u.name AS owner_name,
+                        u.avatar_key IS NOT NULL owner_avatar
+                    FROM {TablesName.RECIPE} r
+                    INNER JOIN {TablesName.CATEGORY} c
+                        ON r.category_id = c.id
+                    INNER JOIN {TablesName.USER} u
+                        ON r.user_id = u.id
+                    WHERE
+                        r.id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -126,7 +195,23 @@ class RecipeRepository(RecipeRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchval(
-                    f"\n            INSERT INTO {TablesName.RECIPE} (\n                name,\n                origin,\n                instructions,\n                ingredients,\n                description,\n                category_id,\n                image_key,\n                user_id\n            )\n            VALUES (\n                $1, $2, $3, $4,\n                $5, $6, $7, $8\n            )\n            RETURNING id;\n            ",
+                    f"""
+                    INSERT INTO {TablesName.RECIPE} (
+                        name,
+                        origin,
+                        instructions,
+                        ingredients,
+                        description,
+                        category_id,
+                        image_key,
+                        user_id
+                    )
+                    VALUES (
+                        $1, $2, $3, $4,
+                        $5, $6, $7, $8
+                    )
+                    RETURNING id;
+                    """,
                     new.name,
                     new.origin,
                     [asdict(instruction) for instruction in new.instructions],
@@ -160,7 +245,13 @@ class RecipeRepository(RecipeRepositoryInterface):
             logger.debug(params)
             try:
                 status = await conn.execute(
-                    f"\n            UPDATE {TablesName.RECIPE}\n            SET\n                {', '.join(set_parts)},\n                updated_at = NOW()\n            WHERE id = ${id_param} AND user_id = ${user_id_param}\n            ",
+                    f"""
+                    UPDATE {TablesName.RECIPE}
+                    SET
+                        {", ".join(set_parts)},
+                        updated_at = NOW()
+                    WHERE id = ${id_param} AND user_id = ${user_id_param}
+                    """,
                     *params,
                 )
             except DatabaseError as e:
@@ -175,7 +266,18 @@ class RecipeRepository(RecipeRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 key = await conn.fetchval(
-                    f"\n            WITH old AS (\n                SELECT image_key\n                FROM {TablesName.RECIPE}\n                WHERE id = $2 AND user_id = $3\n            )\n            UPDATE {TablesName.RECIPE}\n            SET\n                image_key = $1,\n                updated_at = NOW()\n            WHERE id = $2 AND user_id = $3\n            ",
+                    f"""
+                    WITH old AS (
+                        SELECT image_key
+                        FROM {TablesName.RECIPE}
+                        WHERE id = $2 AND user_id = $3
+                    )
+                    UPDATE {TablesName.RECIPE}
+                    SET
+                        image_key = $1,
+                        updated_at = NOW()
+                    WHERE id = $2 AND user_id = $3
+                    """,
                     image_key,
                     id,
                     user_id,
@@ -189,7 +291,10 @@ class RecipeRepository(RecipeRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 status = await conn.execute(
-                    f"\n            DELETE FROM {TablesName.RECIPE}\n                WHERE id = $1 AND user_id = $2\n            ",
+                    f"""
+                    DELETE FROM {TablesName.RECIPE}
+                        WHERE id = $1 AND user_id = $2
+                    """,
                     recipe_id,
                     user_id,
                 )

@@ -21,7 +21,19 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT\n                (\n                    SELECT COUNT(*)\n                    FROM {TablesName.RECIPE} r\n                    WHERE r.user_id = $1\n                ) AS recipes_count,\n                (\n                    SELECT COUNT(*)\n                    FROM {TablesName.TIP} f\n                    WHERE f.user_id = $1\n                ) AS tips_count\n            ",
+                    f"""
+                    SELECT
+                        (
+                            SELECT COUNT(*)
+                            FROM {TablesName.RECIPE} r
+                            WHERE r.user_id = $1
+                        ) AS recipes_count,
+                        (
+                            SELECT COUNT(*)
+                            FROM {TablesName.TIP} f
+                            WHERE f.user_id = $1
+                        ) AS tips_count
+                    """,
                     user_id,
                 )
             except DatabaseError as e:
@@ -39,7 +51,23 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT\n                u.id,\n                u.name,\n                u.email,\n                u.password_hash,\n                u.status,\n                r.name AS role,\n                u.created_at,\n                u.updated_at,\n                u.avatar_key,\n                u.public_id\n            FROM {TablesName.USER} u\n            INNER JOIN {TablesName.ROLE} r\n                ON u.role_id = r.id\n            WHERE u.email = $1\n            ",
+                    f"""
+                    SELECT
+                        u.id,
+                        u.name,
+                        u.email,
+                        u.password_hash,
+                        u.status,
+                        r.name AS role,
+                        u.created_at,
+                        u.updated_at,
+                        u.avatar_key,
+                        u.public_id
+                    FROM {TablesName.USER} u
+                    INNER JOIN {TablesName.ROLE} r
+                        ON u.role_id = r.id
+                    WHERE u.email = $1
+                    """,
                     email,
                 )
             except DatabaseError as e:
@@ -53,7 +81,16 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT name, email, created_at, updated_at, public_id\n                FROM {TablesName.USER} WHERE id = $1\n            ",
+                    f"""
+                    SELECT
+                        name,
+                        email,
+                        created_at,
+                        updated_at,
+                        public_id
+                    FROM {TablesName.USER}
+                    WHERE id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -67,7 +104,23 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT\n                u.id,\n                u.name,\n                u.email,\n                u.password_hash,\n                u.status,\n                r.name AS role,\n                u.created_at,\n                u.updated_at,\n                u.avatar_key,\n                u.public_id\n            FROM {TablesName.USER} u\n            INNER JOIN {TablesName.ROLE} r\n                ON u.role_id = r.id\n            WHERE u.public_id = $1\n            ",
+                    f"""
+                    SELECT
+                        u.id,
+                        u.name,
+                        u.email,
+                        u.password_hash,
+                        u.status,
+                        r.name AS role,
+                        u.created_at,
+                        u.updated_at,
+                        u.avatar_key,
+                        u.public_id
+                    FROM {TablesName.USER} u
+                    INNER JOIN {TablesName.ROLE} r
+                        ON u.role_id = r.id
+                    WHERE u.public_id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -81,7 +134,23 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchrow(
-                    f"\n            SELECT\n                u.id,\n                u.name,\n                u.email,\n                u.password_hash,\n                u.status,\n                r.name AS role,\n                u.created_at,\n                u.updated_at,\n                u.avatar_key,\n                u.public_id\n            FROM {TablesName.USER} u\n            INNER JOIN {TablesName.ROLE} r\n                ON u.role_id = r.id\n            WHERE u.id = $1\n            ",
+                    f"""
+                    SELECT
+                        u.id,
+                        u.name,
+                        u.email,
+                        u.password_hash,
+                        u.status,
+                        r.name AS role,
+                        u.created_at,
+                        u.updated_at,
+                        u.avatar_key,
+                        u.public_id
+                    FROM {TablesName.USER} u
+                    INNER JOIN {TablesName.ROLE} r
+                        ON u.role_id = r.id
+                    WHERE u.id = $1
+                    """,
                     id,
                 )
             except DatabaseError as e:
@@ -95,7 +164,16 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 row = await conn.fetchval(
-                    f"\n            INSERT INTO {TablesName.USER} (name, email, password_hash, role_id) VALUES\n            ($1, $2, $3, $4)\n            RETURNING id;\n            ",
+                    f"""
+                    INSERT INTO {TablesName.USER} (
+                        name,
+                        email,
+                        password_hash,
+                        role_id
+                    )
+                    VALUES ($1, $2, $3, $4)
+                    RETURNING id;
+                    """,
                     new.name,
                     new.email,
                     new.password,
@@ -123,7 +201,12 @@ class UserRepository(UserRepositoryInterface):
             user_id_param = len(params)
             try:
                 status = await conn.execute(
-                    f"\n            UPDATE {TablesName.USER}\n            SET {', '.join(set_parts)},\n                updated_at = NOW()\n            WHERE id = ${user_id_param}\n            ",
+                    f"""
+                    UPDATE {TablesName.USER}
+                    SET {", ".join(set_parts)},
+                        updated_at = NOW()
+                    WHERE id = ${user_id_param}
+                    """,
                     *params,
                 )
             except DatabaseError as e:
@@ -136,7 +219,21 @@ class UserRepository(UserRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 key = await conn.fetchval(
-                    f"\n            WITH old AS (\n                SELECT avatar_key\n                FROM {TablesName.USER}\n                WHERE id = $2\n            )\n            UPDATE {TablesName.USER}\n            SET avatar_key = $1,\n                updated_at = NOW()\n            WHERE id = $2\n            RETURNING (SELECT avatar_key FROM old) AS old_avatar_key;\n            ",
+                    f"""
+                    WITH old AS (
+                        SELECT avatar_key
+                        FROM {TablesName.USER}
+                        WHERE id = $2
+                    )
+                    UPDATE {TablesName.USER}
+                    SET avatar_key = $1,
+                        updated_at = NOW()
+                    WHERE id = $2
+                    RETURNING (
+                        SELECT avatar_key
+                        FROM old
+                    ) AS old_avatar_key;
+                    """,
                     avatar_key,
                     user_id,
                 )

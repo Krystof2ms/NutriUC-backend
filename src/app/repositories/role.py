@@ -20,7 +20,14 @@ class RoleRepository(RoleRepositoryInterface):
         async with self.db.connection() as conn:
             try:
                 rows = await conn.fetch(
-                    f"\n            SELECT\n                id,\n                name,\n                created_at,\n                updated_at\n            FROM {TablesName.ROLE}\n            "
+                    f"""
+                    SELECT
+                        id,
+                        name,
+                        created_at,
+                        updated_at
+                    FROM {TablesName.ROLE}
+                    """
                 )
             except DatabaseError as e:
                 raise RepositoryError(error=e)

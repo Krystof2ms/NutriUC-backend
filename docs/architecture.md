@@ -57,9 +57,12 @@ flowchart TD
     subgraph FastAPI_Runtime["FastAPI Application Runtime"]
         subgraph Middleware_Stack["Middleware & Lifespan"]
             CORS["CORS Middleware"]
-            Timer["Request Timing Logger (X-Process-Time)"]
-            DebugReq["Debug Request Logger"]
             Life["Lifespan Context Manager (startup / shutdown)"]
+            subgraph Middleware_Develop["Solo desarrollo"]
+                Timer["Request Timing Logger (X-Process-Time)"]
+                Debug["Debug Log (Http y Ws)"]
+            end
+            Execptions["Execptions Middlewares (Servicios, Repositorios, Internal, Validaciòn)"]
         end
 
         subgraph In_Memory_State["In-Memory App State"]

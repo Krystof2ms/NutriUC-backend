@@ -12,5 +12,7 @@ if settings.FASTAPI_ENV != "development":
         settings.FASTAPI_ENV,
     )
 
-dev_router = APIRouter(prefix="/dev", tags=["dev"], dependencies=[Depends(require_admin)])
+dev_router = APIRouter(
+    prefix="/dev", tags=["dev"], dependencies=[Depends(require_admin)]
+)
 dev_router.include_router(event_router)

@@ -1,10 +1,10 @@
-from asyncpg import Record
+from typing import Any
 
 from app.models.recipe import RecipeDTO
 from app.models.user import UserSummary
 
 
-def parser_dto(row: Record) -> RecipeDTO:
+def parser_dto(row: Any) -> RecipeDTO:
     return RecipeDTO(
         id=row["id"],
         name=row["name"],
@@ -18,6 +18,6 @@ def parser_dto(row: Record) -> RecipeDTO:
         owner=UserSummary(
             public_id=row["owner_id"],
             name=row["owner_name"],
-            has_image=row["owner_avatar"]
+            has_image=row["owner_avatar"],
         ),
     )

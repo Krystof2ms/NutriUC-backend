@@ -14,7 +14,7 @@ from app.events import UserAvatarChanged
 from app.events.user import UserAvatarRejected
 from app.jobs import ProcessUserAvatar
 from app.jobs.user import Crop
-from app.repositories import UserRepo, db_connection
+from app.repositories.interfaces.user import UserRepositoryInterface
 
 AVATAR_SIZE = 512
 MIN_DIMENSION = 128
@@ -98,8 +98,9 @@ def validate_crop(crop: Crop, width: int, height: int) -> None:
 
 
 class AvatarWorker:
-    def __init__(self, queue: AvatarJobQueue) -> None:
+    def __init__(self, queue: AvatarJobQueue, user_repository: UserRepositoryInterface) -> None:
         self.queue = queue
+        self.user_repository = user_repository
 
     async def run(self) -> None:
         while True:
@@ -132,19 +133,15 @@ class AvatarWorker:
                 job.data.crop,
             )
 
-            async with db_connection() as conn:
-                print("write connection")
-                old_avatar_key = await UserRepo.updateAvatar(
-                    conn,  # pyright: ignore[reportArgumentType]
-                    job.data.user_id,
-                    new_avatar_key,
-                )
+            old_avatar_key = await self.user_repository.updateAvatar(
+                job.data.user_id, new_avatar_key
+            )
 
-                if old_avatar_key:
-                    old_path = AVATAR_DIR / f"{old_avatar_key}.webp"
+            if old_avatar_key:
+                old_path = AVATAR_DIR / f"{old_avatar_key}.webp"
 
-                    if old_path.exists():
-                        old_path.unlink()
+                if old_path.exists():
+                    old_path.unlink()
 
             event = UserAvatarChanged.new()
             await event_manager.publish(job.data.user_id, event)

@@ -11,7 +11,7 @@ class RecipeImageChanged(Event):
     )
 
     @classmethod
-    def new(cls) -> "RecipeImageChanged":
+    def new(cls) -> RecipeImageChanged:
         return cls(
             data={
                 "message": "image accept",
@@ -27,7 +27,7 @@ class RecipeImageRejected(Event):
     )
 
     @classmethod
-    def new(cls, message: str) -> "RecipeImageRejected":
+    def new(cls, message: str) -> RecipeImageRejected:
         return cls(
             data={
                 "detail": message,

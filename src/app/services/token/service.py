@@ -15,67 +15,75 @@ ACCESS_TOKEN_EXPIRE_MINUTES = timedelta(minutes=30)
 REFRESH_TOKEN_EXPIRE_MINUTES = timedelta(days=7)
 
 
-@trace(TraceLayer.SERVICE)
-async def generateAccessToken(
-    user_id: int, expires_delta: timedelta = ACCESS_TOKEN_EXPIRE_MINUTES
-) -> tuple[str, datetime]:
-    """
-    Generate a access token for the given user.
+class TokenService:
+    def __init__(self):
+        pass
 
-    Returns:
-        tuple[str, str, datetime]:
-            - token: The encoded access JWT.
-            - datetime: expire time
-    """
-    expire = datetime.now(UTC) + expires_delta
-    payload = AccessTokenPayload.model_construct(sub=str(user_id), exp=expire)
+    @trace(TraceLayer.SERVICE)
+    async def generateAccessToken(
+        self, user_id: int, expires_delta: timedelta = ACCESS_TOKEN_EXPIRE_MINUTES
+    ) -> tuple[str, datetime]:
+        """
+        Generate a access token for the given user.
 
-    return jwt.encode(  # pyright: ignore[reportUnknownMemberType]
-        payload.model_dump(), settings.JWT_SECRET, algorithm=ALGORITHM
-    ), expire
+        Returns:
+            tuple[str, str, datetime]:
+                - token: The encoded access JWT.
+                - datetime: expire time
+        """
+        expire = datetime.now(UTC) + expires_delta
+        payload = AccessTokenPayload.model_construct(sub=str(user_id), exp=expire)
+        return (
+            jwt.encode(payload.model_dump(), settings.JWT_SECRET, algorithm=ALGORITHM),
+            expire,
+        )
 
+    @trace(TraceLayer.SERVICE)
+    async def generateRefreshToken(
+        self, user_id: int, expires_delta: timedelta = REFRESH_TOKEN_EXPIRE_MINUTES
+    ) -> tuple[str, UUID, datetime]:
+        """
+        Generate a refresh token for the given user.
 
-@trace(TraceLayer.SERVICE)
-async def generateRefreshToken(
-    user_id: int, expires_delta: timedelta = REFRESH_TOKEN_EXPIRE_MINUTES
-) -> tuple[str, UUID, datetime]:
-    """
-    Generate a refresh token for the given user.
+        Returns:
+            tuple[str, str, datetime]:
+                - token: The encoded refresh JWT.
+                - jti: The unique identifier of the token.
+                - datetime: expire time
+        """
+        jti = uuid4()
+        expire = datetime.now(UTC) + expires_delta
+        payload = RefreshTokenPayload.model_construct(
+            sub=str(user_id), jti=str(jti), exp=expire
+        )
+        return (
+            jwt.encode(payload.model_dump(), settings.JWT_SECRET, algorithm=ALGORITHM),
+            jti,
+            expire,
+        )
 
-    Returns:
-        tuple[str, str, datetime]:
-            - token: The encoded refresh JWT.
-            - jti: The unique identifier of the token.
-            - datetime: expire time
-    """
-    jti = uuid4()
-    expire = datetime.now(UTC) + expires_delta
-    payload = RefreshTokenPayload.model_construct(sub=str(user_id), jti=str(jti), exp=expire)
+    @trace(TraceLayer.SERVICE)
+    async def verifyAccessToken(self, token: str) -> AccessTokenPayload:
+        try:
+            payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[ALGORITHM])
+            decode = AccessTokenPayload(**payload)
+            return decode
+        except (
+            ValidationError,
+            jwt.InvalidTokenError,
+            jwt.exceptions.ExpiredSignatureError,
+        ):
+            raise InvalidAccessTokenError()
 
-    return (
-        jwt.encode(  # pyright: ignore[reportUnknownMemberType]
-            payload.model_dump(), settings.JWT_SECRET, algorithm=ALGORITHM
-        ),
-        jti,
-        expire,
-    )
-
-
-@trace(TraceLayer.SERVICE)
-async def verifyAccessToken(token: str) -> AccessTokenPayload:
-    try:
-        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[ALGORITHM])  # pyright: ignore[reportUnknownMemberType]
-        decode = AccessTokenPayload(**payload)  # pyright: ignore[reportAny]
-        return decode
-    except ValidationError, jwt.InvalidTokenError, jwt.exceptions.ExpiredSignatureError:
-        raise InvalidAccessTokenError()
-
-
-@trace(TraceLayer.SERVICE)
-async def verifyRefreshToken(token: str) -> RefreshTokenPayload:
-    try:
-        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[ALGORITHM])  # pyright: ignore[reportUnknownMemberType]
-        decode = RefreshTokenPayload(**payload)  # pyright: ignore[reportAny]
-        return decode
-    except ValidationError, jwt.InvalidTokenError, jwt.exceptions.ExpiredSignatureError:
-        raise InvalidRefreshTokenError()
+    @trace(TraceLayer.SERVICE)
+    async def verifyRefreshToken(self, token: str) -> RefreshTokenPayload:
+        try:
+            payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[ALGORITHM])
+            decode = RefreshTokenPayload(**payload)
+            return decode
+        except (
+            ValidationError,
+            jwt.InvalidTokenError,
+            jwt.exceptions.ExpiredSignatureError,
+        ):
+            raise InvalidRefreshTokenError()

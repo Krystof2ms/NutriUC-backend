@@ -27,7 +27,7 @@ class UserAvatarRejected(Event):
     )
 
     @classmethod
-    def new(cls, message: str) -> "UserAvatarRejected":
+    def new(cls, message: str) -> UserAvatarRejected:
         return cls(
             data={
                 "detail": message,

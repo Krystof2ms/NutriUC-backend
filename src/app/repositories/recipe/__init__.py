@@ -1,3 +1,3 @@
-from . import funcs as RecipeRepo
+from .funcs import RecipeRepository
 
-__all__ = ["RecipeRepo"]
+__all__ = ["RecipeRepository"]

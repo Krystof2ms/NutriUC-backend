@@ -5,11 +5,11 @@ from pathlib import Path
 from typing import Annotated
 from uuid import uuid4
 
-from asyncpg import Connection  # pyright: ignore[reportMissingTypeStubs]
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from fastapi.responses import FileResponse, JSONResponse
 
 from app.api.dependencies.auth import get_profile, get_profile_optional
+from app.api.dependencies.services import get_recipe_service
 from app.api.responses.common import MessageError, MessageResponse
 from app.api.responses.definitions import COMMON_RESPONSES
 from app.api.schemas.auth import AccessTokenPayload
@@ -25,8 +25,7 @@ from app.core.logger import logger
 from app.core.queue.recipe import recipe_queue
 from app.core.registry.category import CategoryRegistry, get_category_registry
 from app.jobs.recipe import ProcessRecipeImage
-from app.repositories.connection import get_db
-from app.services.recipe import service as RecipeService
+from app.services.recipe.service import RecipeService
 
 router = APIRouter(prefix="/recipes", tags=["recipes"], responses=COMMON_RESPONSES)
 
@@ -39,18 +38,15 @@ router = APIRouter(prefix="/recipes", tags=["recipes"], responses=COMMON_RESPONS
         400: {"model": MessageError, "description": "Request invalid"},
     },
 )
-async def findDTO(
+async def find_dto(
     filter_query: Annotated[RecipeQueryDTO, Query()],
-    conn: Connection = Depends(get_db),
     access: AccessTokenPayload | None = Depends(get_profile_optional),
+    recipe_service: RecipeService = Depends(get_recipe_service),
 ):
     if filter_query.mine and access is None:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Session invalid")
-
     user_id = int(access.sub) if filter_query.mine and access else None
-
-    result = await RecipeService.getDTOWithParams(
-        conn,
+    result = await recipe_service.getDTOWithParams(
         name=filter_query.name,
         category=filter_query.category,
         cursor=filter_query.cursor,
@@ -58,7 +54,6 @@ async def findDTO(
         direction=filter_query.direction,
         user_id=user_id,
     )
-
     return result
 
 
@@ -67,16 +62,16 @@ async def findDTO(
     responses={404: {"model": MessageError, "description": "Recipe not found"}},
     response_model=RecipeDTO,
 )
-async def findId(id: int, conn: Connection = Depends(get_db)):
-    result = await RecipeService.getDTO(conn, id)
-
+async def find_id(id: int, recipe_service: RecipeService = Depends(get_recipe_service)):
+    result = await recipe_service.getDTO(id)
     return result
 
 
 @router.get("/recipe/{id}/img", response_class=FileResponse)
-async def getImage(id: int, conn: Connection = Depends(get_db)):
-    path = await RecipeService.getImage(conn, id)
-
+async def get_image(
+    id: int, recipe_service: RecipeService = Depends(get_recipe_service)
+):
+    path = await recipe_service.getImage(id)
     return FileResponse(path)
 
 
@@ -89,13 +84,12 @@ async def getImage(id: int, conn: Connection = Depends(get_db)):
 async def create(
     data: RecipeCreateDTO,
     access_token: AccessTokenPayload = Depends(get_profile),
-    conn: Connection = Depends(get_db),
     registry: CategoryRegistry = Depends(get_category_registry),
+    recipe_service: RecipeService = Depends(get_recipe_service),
 ):
     category_id = registry.get(data.category)
     new = data.to_create()
-    id = await RecipeService.create(conn, new, category_id, int(access_token.sub))
-
+    id = await recipe_service.create(new, category_id, int(access_token.sub))
     return JSONResponse({"message": id}, status_code=status.HTTP_201_CREATED)
 
 
@@ -110,16 +104,14 @@ async def create(
 async def update(
     id: int,
     data: RecipeUpdate,
-    conn: Connection = Depends(get_db),
     access_token: AccessTokenPayload = Depends(get_profile),
     registry: CategoryRegistry = Depends(get_category_registry),
+    recipe_service: RecipeService = Depends(get_recipe_service),
 ):
     if not data.model_fields_set:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Body is empty")
-
     new = data.to_update(registry.get(data.category) if data.category else None)
-    await RecipeService.update(conn, id, int(access_token.sub), new)
-
+    await recipe_service.update(id, int(access_token.sub), new)
     return JSONResponse({"message": "Recipe update"})
 
 
@@ -128,7 +120,7 @@ async def update(
     response_model=MessageResponse,
     status_code=status.HTTP_202_ACCEPTED,
 )
-async def updateAvatar(
+async def update_image(
     id: int,
     image: Annotated[UploadFile, File()],
     access_token: AccessTokenPayload = Depends(get_profile),
@@ -136,44 +128,33 @@ async def updateAvatar(
     user_id = int(access_token.sub)
     recipe_dir = Path("/tmp/recipe") / str(user_id)
     recipe_dir.mkdir(parents=True, exist_ok=True)
-
-    filename = f"{uuid4()}.upload"  # pyright: ignore[reportUndefinedVariable]
+    filename = f"{uuid4()}.upload"
     source_path = recipe_dir / filename
-
     with source_path.open("wb") as file:
-        while chunk := await image.read(1024 * 1024):
+        while chunk := (await image.read(1024 * 1024)):
             file.write(chunk)
-
     job = ProcessRecipeImage.new(user_id=user_id, recipe_id=id, source_path=source_path)
     await recipe_queue.enqueue(job)
-
     return JSONResponse(
-        {"message": "Avatar processing"}, status_code=status.HTTP_202_ACCEPTED
+        {"message": "Image processing"}, status_code=status.HTTP_202_ACCEPTED
     )
 
 
 @router.delete("/recipe/{id}/img", response_model=MessageResponse)
-async def deleteAvatar(
+async def delete_image(
     id: int,
     access_token: AccessTokenPayload = Depends(get_profile),
-    conn: Connection = Depends(get_db),
+    recipe_service: RecipeService = Depends(get_recipe_service),
 ):
     user_id = int(access_token.sub)
-
-    old_avatar_key = await RecipeService.updateImage(conn, id, user_id, None)
-
-    if old_avatar_key:
-        path = RECIPES_DIR / f"{old_avatar_key}.webp"
-
+    old_image_key = await recipe_service.updateImage(id, user_id, None)
+    if old_image_key:
+        path = RECIPES_DIR / f"{old_image_key}.webp"
         try:
             path.unlink(missing_ok=True)
         except OSError:
-            logger.exception(
-                "Failed to delete avatar file: %s",
-                path,
-            )
-
-    return MessageResponse(message="Avatar delete")
+            logger.exception("Failed to delete image file: %s", path)
+    return MessageResponse(message="Image delete")
 
 
 @router.delete(
@@ -184,7 +165,7 @@ async def deleteAvatar(
 async def delete(
     id: int,
     access_token: AccessTokenPayload = Depends(get_profile),
-    conn: Connection = Depends(get_db),
+    recipe_service: RecipeService = Depends(get_recipe_service),
 ):
-    await RecipeService.delete(conn, id, int(access_token.sub))
+    await recipe_service.delete(id, int(access_token.sub))
     return JSONResponse({"message": "Recipe delete"})

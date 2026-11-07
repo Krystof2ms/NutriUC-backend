@@ -1,15 +1,3 @@
-from .funcs import (
-    create,
-    deleteById,
-    getDTO,
-    getDtoWithParams,
-    update,
-)
+from .funcs import TipRepository
 
-__all__ = [
-    "create",
-    "deleteById",
-    "getDTO",
-    "getDtoWithParams",
-    "update",
-]
+__all__ = ["TipRepository"]

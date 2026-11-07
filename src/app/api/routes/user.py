@@ -73,7 +73,7 @@ async def update(
 @router.put(
     "/me/avatar", response_model=MessageResponse, status_code=status.HTTP_202_ACCEPTED
 )
-async def updateAvatar(
+async def update_avatar(
     avatar: Annotated[UploadFile, File()],
     crop: Annotated[Crop, Query()],
     access_token: AccessTokenPayload = Depends(get_profile),
@@ -96,7 +96,7 @@ async def updateAvatar(
 
 
 @router.delete("/me/avatar", response_model=MessageResponse)
-async def deleteAvatar(
+async def delete_avatar(
     access_token: AccessTokenPayload = Depends(get_profile),
     user_service: UserService = Depends(get_user_service),
 ):

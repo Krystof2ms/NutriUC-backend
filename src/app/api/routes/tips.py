@@ -28,7 +28,7 @@ router = APIRouter(prefix="/tips", tags=["tips"], responses=COMMON_RESPONSES)
         400: {"model": MessageError, "description": "Request invalid"},
     },
 )
-async def findDTO(
+async def find_dto(
     filter_query: Annotated[TipQueryDTO, Query()],
     access: AccessTokenPayload | None = Depends(get_profile_optional),
     tip_service: TipService = Depends(get_tip_service),
@@ -52,7 +52,7 @@ async def findDTO(
     responses={404: {"model": MessageError, "description": "Recipe not found"}},
     response_model=TipDTO,
 )
-async def findId(id: int, tip_service: TipService = Depends(get_tip_service)):
+async def find_id(id: int, tip_service: TipService = Depends(get_tip_service)):
     result = await tip_service.getDTO(id)
     return result
 

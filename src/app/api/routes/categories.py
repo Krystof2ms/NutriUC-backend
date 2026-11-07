@@ -11,7 +11,7 @@ router = APIRouter(prefix="/categories", tags=["categories"])
 
 
 @router.get("/names", response_model=list[str])
-async def getNames(
+async def get_names(
     only_type: CategoryType | None = None,
     category_service: CategoryService = Depends(get_category_service),
 ):

@@ -38,7 +38,7 @@ router = APIRouter(prefix="/recipes", tags=["recipes"], responses=COMMON_RESPONS
         400: {"model": MessageError, "description": "Request invalid"},
     },
 )
-async def findDTO(
+async def find_dto(
     filter_query: Annotated[RecipeQueryDTO, Query()],
     access: AccessTokenPayload | None = Depends(get_profile_optional),
     recipe_service: RecipeService = Depends(get_recipe_service),
@@ -62,13 +62,13 @@ async def findDTO(
     responses={404: {"model": MessageError, "description": "Recipe not found"}},
     response_model=RecipeDTO,
 )
-async def findId(id: int, recipe_service: RecipeService = Depends(get_recipe_service)):
+async def find_id(id: int, recipe_service: RecipeService = Depends(get_recipe_service)):
     result = await recipe_service.getDTO(id)
     return result
 
 
 @router.get("/recipe/{id}/img", response_class=FileResponse)
-async def getImage(
+async def get_image(
     id: int, recipe_service: RecipeService = Depends(get_recipe_service)
 ):
     path = await recipe_service.getImage(id)
@@ -120,7 +120,7 @@ async def update(
     response_model=MessageResponse,
     status_code=status.HTTP_202_ACCEPTED,
 )
-async def updateAvatar(
+async def update_image(
     id: int,
     image: Annotated[UploadFile, File()],
     access_token: AccessTokenPayload = Depends(get_profile),
@@ -136,25 +136,25 @@ async def updateAvatar(
     job = ProcessRecipeImage.new(user_id=user_id, recipe_id=id, source_path=source_path)
     await recipe_queue.enqueue(job)
     return JSONResponse(
-        {"message": "Avatar processing"}, status_code=status.HTTP_202_ACCEPTED
+        {"message": "Image processing"}, status_code=status.HTTP_202_ACCEPTED
     )
 
 
 @router.delete("/recipe/{id}/img", response_model=MessageResponse)
-async def deleteAvatar(
+async def delete_image(
     id: int,
     access_token: AccessTokenPayload = Depends(get_profile),
     recipe_service: RecipeService = Depends(get_recipe_service),
 ):
     user_id = int(access_token.sub)
-    old_avatar_key = await recipe_service.updateImage(id, user_id, None)
-    if old_avatar_key:
-        path = RECIPES_DIR / f"{old_avatar_key}.webp"
+    old_image_key = await recipe_service.updateImage(id, user_id, None)
+    if old_image_key:
+        path = RECIPES_DIR / f"{old_image_key}.webp"
         try:
             path.unlink(missing_ok=True)
         except OSError:
-            logger.exception("Failed to delete avatar file: %s", path)
-    return MessageResponse(message="Avatar delete")
+            logger.exception("Failed to delete image file: %s", path)
+    return MessageResponse(message="Image delete")
 
 
 @router.delete(

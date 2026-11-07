@@ -33,14 +33,14 @@ async def login(
     data: Annotated[LoginForm, Form()],
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    acess_token, refresh_token, user = await auth_service.login(
+    access_token, refresh_token, user = await auth_service.login(
         data.email, data.password
     )
     response = JSONResponse(
         {"message": {"text": "successful login", "role": user.role}}
     )
     response.set_cookie(
-        key=KEY_ACCESS_TOKEN_COOKIE, value=acess_token, **vars(ACCESS_TOKEN_COOKIE)
+        key=KEY_ACCESS_TOKEN_COOKIE, value=access_token, **vars(ACCESS_TOKEN_COOKIE)
     )
     response.set_cookie(
         key=KEY_REFRESH_TOKEN_COOKIE, value=refresh_token, **vars(REFRESH_TOKEN_COOKIE)

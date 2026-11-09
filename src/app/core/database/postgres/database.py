@@ -6,7 +6,7 @@ from typing import Any
 
 import asyncpg  # pyright: ignore[reportMissingTypeStubs]
 
-from app.core.config import TraceLayer, settings
+from app.core.config import Environments, TraceLayer, settings
 from app.core.database.interfaces import ConnectionInterface, DatabaseInterface
 from app.core.database.postgres.connection import PostgresConnection
 from app.core.logger import init_logger as logger_core
@@ -26,7 +26,7 @@ class PostgresDatabase(DatabaseInterface):
         query_logger: logging.Logger | None = None
         if (
             TraceLayer.DB in settings.TRACE_LAYERS
-            and settings.FASTAPI_ENV == "development"
+            and settings.FASTAPI_ENV == Environments.DEVELOPMENT
         ):
             query_logger = logger_core("sql")
 

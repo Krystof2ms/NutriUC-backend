@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 
 from app.api.dependencies.auth import require_admin
-from app.core.config import settings
+from app.core.config import Environments, settings
 from app.core.logger import logger
 
 from .event import router as event_router
 
-if settings.FASTAPI_ENV != "development":
+if settings.FASTAPI_ENV == Environments.DEVELOPMENT:
     logger.critical(
         "Attempt to initialize dev APIs outside DEVELOPMENT environment: %s",
         settings.FASTAPI_ENV,

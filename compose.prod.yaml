@@ -6,16 +6,16 @@ services:
     networks:
       - backend
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d web_saludable"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d nutri_uc"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 3
     volumes:
       - db_data:/var/lib/postgresql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro,Z
     env_file: .env.prod
 
-  app:
+  backend:
     build:
       context: .
       dockerfile: ./Dockerfile

@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
 from app.context_manager import lifespan
-from app.core.config import TraceLayer, settings
+from app.core.config import Environments, TraceLayer, settings
 from app.core.logger import logger
 from app.core.middleware.debug import DebugMiddleware, list_routes, time_log_requests
 from app.core.middleware.exceptions import (
@@ -18,7 +18,7 @@ from app.services.errors import ServiceError
 
 app = FastAPI(lifespan=lifespan)
 
-if settings.FASTAPI_ENV == "development":
+if settings.FASTAPI_ENV == Environments.DEVELOPMENT:
     _ = app.middleware("http")(time_log_requests)
 
 if TraceLayer.API in settings.TRACE_LAYERS and settings.FASTAPI_ENV == "development":
@@ -39,7 +39,7 @@ app.add_middleware(
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-if settings.FASTAPI_ENV == "development":
+if settings.FASTAPI_ENV == Environments.DEVELOPMENT:
     logger.info("list routes:")
     list_routes(app.routes)
 

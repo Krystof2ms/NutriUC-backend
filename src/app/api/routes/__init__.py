@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.core.config import settings
+from app.core.config import Environments, settings
 
 from . import auth, categories, events, recipes, tips, user
 from .dev import dev_router
@@ -14,5 +14,5 @@ def init_routers(router: APIRouter):
     router.include_router(categories.router)
     router.include_router(events.router)
 
-    if settings.FASTAPI_ENV == "development":
+    if settings.FASTAPI_ENV == Environments.DEVELOPMENT:
         router.include_router(dev_router)

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.core.config import settings
+from app.core.config import settings, Environments
 
 
 @dataclass(frozen=True)
@@ -18,7 +18,7 @@ KEY_ACCESS_TOKEN_COOKIE = "access_token"
 ACCESS_TOKEN_COOKIE = CookieConfig(
     path="/",
     httponly=True,
-    secure=settings.FASTAPI_ENV == "production",
+    secure=settings.FASTAPI_ENV == Environments.PRODUCTION,
     samesite="lax",
 )
 
@@ -26,6 +26,6 @@ KEY_REFRESH_TOKEN_COOKIE = "refresh_token"
 REFRESH_TOKEN_COOKIE = CookieConfig(
     path="/",
     httponly=True,
-    secure=settings.FASTAPI_ENV == "production",
+    secure=settings.FASTAPI_ENV == Environments.PRODUCTION,
     samesite="strict",
 )

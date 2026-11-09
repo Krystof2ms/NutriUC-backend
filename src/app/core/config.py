@@ -17,9 +17,13 @@ class TraceLayer(StrEnum):
     EVENTS = "events"
 
 
+class Environments(StrEnum):
+    DEVELOPMENT = "development"
+    PRODUCTION = "production"
+
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
-    FASTAPI_ENV: Literal["development", "production"] = "development"
+    FASTAPI_ENV: Environments = Environments.DEVELOPMENT
     DATABASE_URL: PostgresDsn | None = None
     CORS_ORIGINS: list[str] | None = None
     TRACE_LAYERS: set[TraceLayer] = set()

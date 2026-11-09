@@ -19,84 +19,98 @@ from app.services.token.service import TokenService
 from app.services.user.service import UserService
 
 
-async def get_cookies_auth(
+async def get_access_payload(
     cookies: Annotated[CookiesAuth, Cookie()],
     token_service: TokenService = Depends(get_token_service),
-):
-    if cookies.refresh_token is None:
+) -> AccessTokenPayload:
+    if cookies.access_token is None:
         raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED, detail="Refresh token not found"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access token not found",
         )
 
-    access_payload = None
-
-    if cookies.access_token is not None:  # pyright: ignore[reportUnnecessaryComparison]
-        try:
-            access_payload = await token_service.verifyAccessToken(cookies.access_token)
-        except InvalidAccessTokenError:
-            access_payload = None
-
-    return cookies.refresh_token, access_payload
+    try:
+        return await token_service.verifyAccessToken(cookies.access_token)
+    except InvalidAccessTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired access token",
+        )
 
 
 async def get_profile(
     response: Response,
-    tokens: tuple[str, AccessTokenPayload | None] = Depends(get_cookies_auth),
+    cookies: Annotated[CookiesAuth, Cookie()],
+    token_service: TokenService = Depends(get_token_service),
     auth_service: AuthService = Depends(get_auth_service),
 ) -> AccessTokenPayload:
-    payload = tokens[1]
 
-    if payload is None:
+    if cookies.access_token is not None:
         try:
-            access_token, payload = await auth_service.refresh(tokens[0])
-            response.set_cookie(
-                key=KEY_ACCESS_TOKEN_COOKIE,
-                value=access_token,
-                **vars(ACCESS_TOKEN_COOKIE),  # pyright: ignore[reportAny]
-            )
+            return await token_service.verifyAccessToken(cookies.access_token)
+        except InvalidAccessTokenError:
+            pass
 
-            return payload
-        except AuthServiceError:
-            raise HTTPException(
-                status.HTTP_401_UNAUTHORIZED, detail="Refresh token invalidate"
-            )
+    if cookies.refresh_token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token not found",
+        )
 
+    try:
+        access_token, payload = await auth_service.refresh(cookies.refresh_token)
+
+        response.set_cookie(
+            key=KEY_ACCESS_TOKEN_COOKIE,
+            value=access_token,
+            **vars(ACCESS_TOKEN_COOKIE),
+        )
+
+        return payload
+
+    except AuthServiceError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token invalid",
+        )
+
+
+async def get_profile_ws(
+    payload: AccessTokenPayload = Depends(get_access_payload),
+) -> AccessTokenPayload:
     return payload
 
 
-async def get_cookies_auth_optional(
+async def get_access_payload_optional(
     cookies: Annotated[CookiesAuth, Cookie()],
     token_service: TokenService = Depends(get_token_service),
-):
-    if cookies.refresh_token is None:
+) -> AccessTokenPayload | None:
+
+    if cookies.access_token is None:
         return None
 
-    access_payload = None
-
-    if cookies.access_token is not None:  # pyright: ignore[reportUnnecessaryComparison]
-        try:
-            access_payload = await token_service.verifyAccessToken(cookies.access_token)
-        except InvalidAccessTokenError:
-            access_payload = None
-
-    return access_payload
+    try:
+        return await token_service.verifyAccessToken(cookies.access_token)
+    except InvalidAccessTokenError:
+        return None
 
 
 async def get_profile_optional(
-    access: AccessTokenPayload | None = Depends(get_cookies_auth_optional),
+    payload: AccessTokenPayload | None = Depends(get_access_payload_optional),
 ) -> AccessTokenPayload | None:
-    return access
+    return payload
 
 
 async def require_admin(
     access_token: AccessTokenPayload = Depends(get_profile),
     user_service: UserService = Depends(get_user_service),
 ) -> AccessTokenPayload:
+
     user = await user_service.getUserDB(user_id=int(access_token.sub))
 
     if user.role.lower() != "admin":
         raise HTTPException(
-            status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin role required",
         )
 

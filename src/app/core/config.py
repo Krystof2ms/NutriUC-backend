@@ -1,6 +1,5 @@
 from enum import StrEnum
 from pathlib import Path
-from typing import Literal
 
 from pydantic import PostgresDsn, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings

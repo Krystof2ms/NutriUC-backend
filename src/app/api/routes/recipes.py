@@ -12,6 +12,7 @@ from app.api.dependencies.auth import get_profile, get_profile_optional
 from app.api.dependencies.services import get_recipe_service
 from app.api.responses.common import MessageError, MessageResponse
 from app.api.responses.definitions import COMMON_RESPONSES
+from app.api.responses.errors import ValidationErrorResponse
 from app.api.schemas.auth import AccessTokenPayload
 from app.api.schemas.pagination import CursorPage
 from app.api.schemas.recipe import (
@@ -20,6 +21,7 @@ from app.api.schemas.recipe import (
     RecipeQueryDTO,
     RecipeUpdate,
 )
+from app.constants.avatar import MAX_AVATAR_SIZE
 from app.constants.recipe import RECIPES_DIR
 from app.core.logger import logger
 from app.core.queue.recipe import recipe_queue
@@ -119,6 +121,12 @@ async def update(
     "/recipe/{id}/img",
     response_model=MessageResponse,
     status_code=status.HTTP_202_ACCEPTED,
+    responses={
+        status.HTTP_413_REQUEST_ENTITY_TOO_LARGE: {
+            "model": ValidationErrorResponse,
+            "description": "Image file exceeds the size limit",
+        }
+    },
 )
 async def update_image(
     id: int,
@@ -130,8 +138,19 @@ async def update_image(
     recipe_dir.mkdir(parents=True, exist_ok=True)
     filename = f"{uuid4()}.upload"
     source_path = recipe_dir / filename
+    size = 0
     with source_path.open("wb") as file:
         while chunk := (await image.read(1024 * 1024)):
+            size += len(chunk)
+            if size > MAX_AVATAR_SIZE:
+                source_path.unlink(missing_ok=True)
+                return JSONResponse(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    content={
+                        "code": "MODEL_ERROR",
+                        "message": "Image file exceeds the 5 MB limit",
+                    },
+                )
             file.write(chunk)
     job = ProcessRecipeImage.new(user_id=user_id, recipe_id=id, source_path=source_path)
     await recipe_queue.enqueue(job)

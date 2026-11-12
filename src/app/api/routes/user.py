@@ -12,6 +12,7 @@ from app.api.dependencies.auth import get_profile
 from app.api.dependencies.services import get_user_service
 from app.api.responses.common import MessageError, MessageResponse
 from app.api.responses.definitions import COMMON_RESPONSES
+from app.api.responses.errors import ValidationErrorResponse
 from app.api.schemas.auth import AccessTokenPayload
 from app.api.schemas.user import (
     Crop,
@@ -20,7 +21,7 @@ from app.api.schemas.user import (
     UserSummaryMe,
     UserUpdate,
 )
-from app.constants.avatar import AVATAR_DIR
+from app.constants.avatar import AVATAR_DIR, MAX_AVATAR_SIZE
 from app.core.logger import logger
 from app.core.queue import avatar_queue
 from app.core.registry.roles import RoleRegistry, get_role_registry
@@ -71,7 +72,15 @@ async def update(
 
 
 @router.put(
-    "/me/avatar", response_model=MessageResponse, status_code=status.HTTP_202_ACCEPTED
+    "/me/avatar",
+    response_model=MessageResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+    responses={
+        status.HTTP_413_REQUEST_ENTITY_TOO_LARGE: {
+            "model": ValidationErrorResponse,
+            "description": "Avatar file exceeds the size limit",
+        }
+    },
 )
 async def update_avatar(
     avatar: Annotated[UploadFile, File()],
@@ -83,8 +92,19 @@ async def update_avatar(
     avatar_dir.mkdir(parents=True, exist_ok=True)
     filename = f"{uuid4()}.upload"
     source_path = avatar_dir / filename
+    size = 0
     with source_path.open("wb") as file:
         while chunk := (await avatar.read(1024 * 1024)):
+            size += len(chunk)
+            if size > MAX_AVATAR_SIZE:
+                source_path.unlink(missing_ok=True)
+                return JSONResponse(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    content={
+                        "code": "MODEL_ERROR",
+                        "message": "Avatar file exceeds the 5 MB limit",
+                    },
+                )
             file.write(chunk)
     job = ProcessUserAvatar.new(
         user_id=user_id, source_path=source_path, crop=crop.to_crop()

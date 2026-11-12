@@ -1,7 +1,7 @@
 from enum import StrEnum
 from pathlib import Path
 
-from pydantic import PostgresDsn, ValidationInfo, field_validator
+from pydantic import PostgresDsn, ValidationError, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings
 
 from app.core.logger import logger
@@ -58,16 +58,29 @@ class Settings(BaseSettings):
         env = info.data.get("FASTAPI_ENV")
 
         if v is None:
-            if env == "production":
+            if env == Environments.PRODUCTION:
                 raise ValueError("CORS_ORIGINS must be provided")
 
             logger.warning("CORS_ORIGINS not configured, using '*'")
             return ["*"]
 
-        if "*" in v and env == "production":
+        if "*" in v and Environments.PRODUCTION:
             raise ValueError("CORS_ORIGINS '*' is not allowed in production")
 
         return v
 
 
-settings = Settings()
+try:
+    settings = Settings()
+except ValidationError as exc:
+    for error in exc.errors(include_input=False):
+        location = ".".join(str(item) for item in error["loc"])
+
+        logger.critical(
+            "Configuration error | field=%s | type=%s | message=%s",
+            location,
+            error["type"],
+            error["msg"],
+        )
+
+    raise SystemExit(1) from None

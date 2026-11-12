@@ -11,12 +11,14 @@ from app.core.registry.category import CategoryRegistry
 from app.core.registry.roles import RoleRegistry
 from app.core.workers.avatar import AvatarWorker
 from app.core.workers.recipe import RecipeWorker
-from app.repositories.category import CategoryRepository
-from app.repositories.recipe.funcs import RecipeRepository
-from app.repositories.role import RoleRepository
-from app.repositories.session import SessionRepository
-from app.repositories.tip.funcs import TipRepository
-from app.repositories.user import UserRepository
+from app.repositories import (
+    CategoryRepository,
+    RecipeRepository,
+    RoleRepository,
+    SessionRepository,
+    TipRepository,
+    UserRepository,
+)
 from app.services import (
     AuthService,
     CategoryService,

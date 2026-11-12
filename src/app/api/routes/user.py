@@ -26,7 +26,7 @@ from app.core.logger import logger
 from app.core.queue import avatar_queue
 from app.core.registry.roles import RoleRegistry, get_role_registry
 from app.jobs.user import ProcessUserAvatar
-from app.services.user.service import UserService
+from app.services.user import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
 

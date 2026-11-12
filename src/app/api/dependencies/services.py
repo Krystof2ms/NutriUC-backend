@@ -1,12 +1,14 @@
 from fastapi import Request
 from fastapi.requests import HTTPConnection
 
-from app.services.auth.service import AuthService
-from app.services.category.service import CategoryService
-from app.services.recipe.service import RecipeService
-from app.services.tip.service import TipService
-from app.services.token.service import TokenService
-from app.services.user.service import UserService
+from app.services import (
+    AuthService,
+    CategoryService,
+    RecipeService,
+    TipService,
+    TokenService,
+    UserService,
+)
 
 
 def get_auth_service(connection: HTTPConnection) -> AuthService:

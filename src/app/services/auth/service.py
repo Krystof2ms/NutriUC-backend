@@ -10,8 +10,7 @@ from app.models.session import SessionCreate
 from app.models.user import UserDB, UserStatus
 from app.repositories.interfaces.session import SessionRepositoryInterface
 from app.repositories.interfaces.user import UserRepositoryInterface
-from app.services.token.errors import TokenServiceError
-from app.services.token.service import TokenService
+from app.services.token import TokenService, TokenServiceError
 
 from .errors import (
     TokenInvalidError,

@@ -27,7 +27,7 @@ from app.core.logger import logger
 from app.core.queue.recipe import recipe_queue
 from app.core.registry.category import CategoryRegistry, get_category_registry
 from app.jobs.recipe import ProcessRecipeImage
-from app.services.recipe.service import RecipeService
+from app.services.recipe import RecipeService
 
 router = APIRouter(prefix="/recipes", tags=["recipes"], responses=COMMON_RESPONSES)
 

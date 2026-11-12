@@ -17,12 +17,14 @@ from app.repositories.role import RoleRepository
 from app.repositories.session import SessionRepository
 from app.repositories.tip.funcs import TipRepository
 from app.repositories.user import UserRepository
-from app.services.auth.service import AuthService
-from app.services.category.service import CategoryService
-from app.services.recipe.service import RecipeService
-from app.services.tip.service import TipService
-from app.services.token.service import TokenService
-from app.services.user.service import UserService
+from app.services import (
+    AuthService,
+    CategoryService,
+    RecipeService,
+    TipService,
+    TokenService,
+    UserService,
+)
 
 
 @asynccontextmanager

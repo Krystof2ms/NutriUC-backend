@@ -12,11 +12,9 @@ from app.api.dependencies.services import (
 )
 from app.api.schemas.auth import AccessTokenPayload, CookiesAuth
 from app.core.cookies import ACCESS_TOKEN_COOKIE, KEY_ACCESS_TOKEN_COOKIE
-from app.services.auth.errors import AuthServiceError
-from app.services.auth.service import AuthService
-from app.services.token.errors import InvalidAccessTokenError
-from app.services.token.service import TokenService
-from app.services.user.service import UserService
+from app.services.auth import AuthService, AuthServiceError
+from app.services.token import InvalidAccessTokenError, TokenService
+from app.services.user import UserService
 
 
 async def get_access_payload(

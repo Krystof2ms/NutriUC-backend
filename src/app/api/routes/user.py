@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, 
 from fastapi.responses import FileResponse, JSONResponse
 
 from app.api.dependencies.auth import get_profile
-from app.api.dependencies.services import get_user_service
+from app.api.dependencies.services import get_auth_service, get_user_service
 from app.api.responses.common import MessageError, MessageResponse
 from app.api.responses.definitions import COMMON_RESPONSES
 from app.api.responses.errors import ValidationErrorResponse
@@ -22,10 +22,17 @@ from app.api.schemas.user import (
     UserUpdate,
 )
 from app.constants.avatar import AVATAR_DIR, MAX_AVATAR_SIZE
+from app.core.cookies import (
+    ACCESS_TOKEN_COOKIE,
+    KEY_ACCESS_TOKEN_COOKIE,
+    KEY_REFRESH_TOKEN_COOKIE,
+    REFRESH_TOKEN_COOKIE,
+)
 from app.core.logger import logger
 from app.core.queue import avatar_queue
 from app.core.registry.roles import RoleRegistry, get_role_registry
 from app.jobs.user import ProcessUserAvatar
+from app.services.auth import AuthService
 from app.services.user import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -140,9 +147,22 @@ async def avatar(id: UUID, user_service: UserService = Depends(get_user_service)
 @router.post("/", response_model=MessageResponse)
 async def create(
     data: UserCreateDTO,
+    with_tokens: bool = Query(default=False),
     registry: RoleRegistry = Depends(get_role_registry),
     user_service: UserService = Depends(get_user_service),
+    auth_service: AuthService = Depends(get_auth_service),
 ):
     new = data.to_create(registry.get("user"))
-    await user_service.registerUser(new)
-    return MessageResponse(message="User create")
+    user_id = await user_service.registerUser(new)
+    if not with_tokens:
+        return MessageResponse(message="User create")
+
+    access_token, refresh_token = await auth_service.createSession(user_id)
+    response = JSONResponse({"message": "User create"})
+    response.set_cookie(
+        key=KEY_ACCESS_TOKEN_COOKIE, value=access_token, **vars(ACCESS_TOKEN_COOKIE)
+    )
+    response.set_cookie(
+        key=KEY_REFRESH_TOKEN_COOKIE, value=refresh_token, **vars(REFRESH_TOKEN_COOKIE)
+    )
+    return response

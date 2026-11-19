@@ -52,11 +52,12 @@ class UserService:
         return user
 
     @trace(TraceLayer.SERVICE)
-    async def registerUser(self, data: UserCreate):
+    async def registerUser(self, data: UserCreate) -> int:
         data = replace(data, password=password_hash.hash(data.password))
         id = await self.user_repo.create(data)
         if id is None:
             raise UserNotCreateError()
+        return id
 
     @trace(TraceLayer.SERVICE)
     async def updateUser(self, id: int, data: UserUpdate):

@@ -38,6 +38,23 @@ class AuthService:
         return sha256(token.encode("utf-8")).hexdigest()
 
     @trace(TraceLayer.SERVICE)
+    async def createSession(self, user_id: int) -> tuple[str, str]:
+        """Issue access and refresh tokens for a newly registered user."""
+        access_token, _ = await self.token_service.generateAccessToken(user_id)
+        refresh_token, jti, expire = await self.token_service.generateRefreshToken(
+            user_id
+        )
+        await self.session_repo.create(
+            SessionCreate(
+                token_hash=self.hash_token(refresh_token),
+                jti=jti,
+                user_id=user_id,
+                expires_at=expire,
+            )
+        )
+        return access_token, refresh_token
+
+    @trace(TraceLayer.SERVICE)
     async def login(self, email: str, password: str) -> tuple[str, str, UserDB]:
         """
         Login for user.

@@ -6,6 +6,8 @@ from typing import Any
 
 import asyncpg  # pyright: ignore[reportMissingTypeStubs]
 
+from .sequence import sync_identity_sequence
+
 DATABASE_DIR = Path(__file__).parent.parent / "database"
 
 
@@ -53,6 +55,7 @@ async def seed():
                     for category in categories
                 ],
             )
+            await sync_identity_sequence(conn, "Category")
 
             # Role
             await conn.executemany(
@@ -70,6 +73,7 @@ async def seed():
                     for role in roles
                 ],
             )
+            await sync_identity_sequence(conn, "Role")
 
             # User
             await conn.executemany(
@@ -100,6 +104,7 @@ async def seed():
                     for user in users
                 ],
             )
+            await sync_identity_sequence(conn, "User")
 
             # Recipe
             await conn.executemany(

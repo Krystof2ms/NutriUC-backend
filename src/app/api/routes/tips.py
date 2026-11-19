@@ -15,7 +15,7 @@ from app.api.schemas.auth import AccessTokenPayload
 from app.api.schemas.pagination import CursorPage
 from app.api.schemas.tip import TipCreateDTO, TipDTO, TipQueryDTO, TipUpdate
 from app.core.registry.category import CategoryRegistry, get_category_registry
-from app.services.tip.service import TipService
+from app.services.tip import TipService
 
 router = APIRouter(prefix="/tips", tags=["tips"], responses=COMMON_RESPONSES)
 

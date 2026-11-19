@@ -17,7 +17,7 @@ from app.core.cookies import (
     KEY_REFRESH_TOKEN_COOKIE,
     REFRESH_TOKEN_COOKIE,
 )
-from app.services.auth.service import AuthService
+from app.services.auth import AuthService
 
 router = APIRouter(prefix="/auth", tags=["auth"], responses=COMMON_RESPONSES)
 

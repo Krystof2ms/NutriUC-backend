@@ -35,14 +35,13 @@ dev = [
 
 [tool.poe.tasks.app]
 help = "Run the FastAPI application"
-cmd = "uv run --env-file ${env_file} fastapi ${mode} --port ${port}"
+cmd = "uv run --env-file ${env_file} uvicorn ${app} --host ${host} --port ${port} ${reload}"
 args = [
-    { name = "mode", default = "dev", choices = [
-        "dev",
-        "run",
-    ], help = "Run mode: dev or production" },
-    { name = "port", default = "3000", help = "Run port (default 3000)"},
-    { name = "env_file", default = ".env", help = "Env file to load (.env, .env.local, .env.production, etc)" },
+    { name = "app", default = "app.main:app", help = "ASGI application" },
+    { name = "host", default = "0.0.0.0" },
+    { name = "port", default = "3000" },
+    { name = "env_file", default = ".env" },
+    { name = "reload", default = "", choices = ["--reload", ""] },
 ]
 
 [tool.poe.tasks.seed]

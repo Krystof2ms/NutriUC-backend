@@ -23,6 +23,7 @@ class BaseUser(BaseModel):
 class UserSummaryMe(UserSummary):
     email: str
     created_at: datetime
+    role: str
 
 
 class UserCreate(BaseModel):

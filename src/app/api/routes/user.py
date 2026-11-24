@@ -1,6 +1,7 @@
 # pyright: reportCallInDefaultInitializer=false
 # ruff: noqa: B008
 
+from dataclasses import replace
 from pathlib import Path
 from typing import Annotated
 from uuid import UUID, uuid4
@@ -51,10 +52,13 @@ async def summary(
 async def me(
     access_token: AccessTokenPayload = Depends(get_profile),
     user_service: UserService = Depends(get_user_service),
+    registry: RoleRegistry = Depends(get_role_registry),
 ):
     user = await user_service.getUserDB(int(access_token.sub), "user")
-    data = user.to_summary_me()
-    return data
+    return replace(
+        user.to_summary_me(),
+        role=registry.get_name(registry.get(user.role)),
+    )
 
 
 @router.patch(

@@ -22,6 +22,7 @@ class UserSummary:
 class UserSummaryMe(UserSummary):
     email: str
     created_at: datetime
+    role: str
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -71,7 +72,8 @@ class UserDB(BaseUser):
             name=self.name,
             email=self.email,
             created_at=self.created_at,
-            has_image=self.avatar_key is not None
+            has_image=self.avatar_key is not None,
+            role=self.role,
         )
 
 
